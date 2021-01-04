@@ -1,0 +1,10 @@
+log.txt
+.venv
+.env
+memgraph-1.1.0-community-docker.tar.gz
+memgraph_1.1.0-community-1_amd64.deb
+.pm2
+
+databases/couchdb/data
+databases/couchdb/etc
+databases/couchdb/log
