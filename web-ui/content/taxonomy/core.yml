@@ -1,0 +1,165 @@
+title: Taxonomy
+description: Definition of initial tags and labels
+taxonomy_groups:
+  # Misc
+  - group_title: Misc labels
+    description: null
+    classifiers:
+    - name: pinned
+      description: Pinned item
+    - name: starred
+      description: Starred item
+    - name: trashed
+      description: Trashed if item originates with Boostnote
+    - name: dir
+      description: Specifies directory which item belonged to (if item originates with Boostnote)
+  # Top Domains
+  - group_title: Domain namespaces
+    description: Used to specify high-level breakdown by domain, i.e. Outsourceland or Nova Alexandria, think of these as global namespaces
+    classifiers:
+    - name: sf0
+      description: Item belongs to sf0 project
+    - name: enclave
+      description: Item belongs to Enclave project - is secret and personal
+    - name: srcland
+      description: Tagged items belongs to to Outsourceland project
+    - name: alexandria
+      description: denotes relevance to Nova Alexandria project
+  # Sofia0 and Nova Alexandria
+  - group_title: sf0 DSL
+    description: tags and labels from sf0 project DSL
+    classifiers:
+    - name: capability
+      description: null
+    - name: competency
+      description: null
+    - name: project
+      description: null
+    - name: app
+      description: null
+    - name: paradox
+      description: null
+    - name: model
+      description: null
+    - name: phenomenon
+      description: null
+    - name: hypothesis
+      description: null
+    - name: term
+      description: Term with or without definition, with optionally specified vocabulary e.g. "term:aws" or "term:naval"
+    - name: abbr
+      description: Abbreviation with or without definition, with optionally specified vocabulary e.g. "abbr:aws" or "abbr:networking"
+    - name: concept
+      description: Specific concept, such as "attack surface" in cyber-security
+    - name: Notable or collectable software
+      description: null
+    - name: hardw
+      description: Notable or collectable hardware
+    - name: field
+      description: field:<subject> e.g. cybersecurity, data-mining, SBC, AI, military history
+  # Outsourceland
+  - group_title: Outsourceland project taxonomy
+    description:
+    classifiers:
+    - name: org
+      description: Organization
+    - name: person
+      description: Person (usually Outsourceland context)
+      options:
+      - option: developer
+        description: null
+      - option: recruiter
+        description: null
+    - name: venue
+      description: null
+    - name: vacancy
+      description: null
+    - name: interviewQ
+      description: null
+    - name: school
+      description: null
+    - name: CRM
+      description: null
+  # Data Discovery: classification
+  - group_title: Data-source classification
+    description:
+    classifiers:
+    - name: digital-asset
+      description: Digital asset, e.g. dataset corpus, SVG library, font or icon collection
+    - name: datasource
+      description: General source of useful data at high density
+    - name: news-source
+      description: Data source to monitor for news
+    - name: instant-messaging
+      description: Instant messaging group or channel as source of data
+      options:
+      - option: telegram
+        description: null
+      - option: slack
+        description: null
+      - option: skype
+        description: null
+      - option: irc
+        description: null
+      - option: gitter
+        description: null
+    - name: publication
+      description: A book, scientific paper, podcast or other informative publication
+      options:
+      - option: book
+        description: null
+      - option: paper
+        description: null
+      - option: podcast
+        description: null
+      - option: lecture
+        description: null
+      - option: audio
+        description: null
+    - name: repo
+      description: Codebase (typically a Git repository)
+      options:
+      - option: github
+        description: null
+      - option: gitlab
+        description: null
+      - option: gitea
+        description: null
+      - option: svn
+        description: null
+      - option: mercurial
+        description: null
+  # Data Discovery: actionable items
+  - group_title: Data Discovery Operations
+    description:
+    classifiers:
+    - name: scrape
+      description: Target for scraping valuable content and insights
+    - name: monitor
+      description: Marks target for monitoring automation (e.g. a data source to be checked for news)
+    - name: explore
+      description: Something to be explored in more detail, e.g. item bookmarked and marked for further examination
+    - name: labwork
+      description: Marks something that needs a bit of hacking and trying out
+  # Dev board and planning
+  - group_title: Development board
+    description: Common development planning tags (for Kanban-like boards)
+    classifiers:
+    - name: enhance
+      description: Marks additional features, functionality or further improvements
+    - name: fix
+      description: Marks something that needs fixing
+    - name: research
+      description: Marks something that needs research
+    - name: techdebt
+      description: Marks technical debt
+    - name: design
+      description: Marks something that needs designs or specification
+    - name: document
+      description: Marks something that needs documentation
+    - name: test
+      description: Marks something that needs testing
+    - name: review
+      description: Marks something that needs review
+    - name: develop
+      description: Marks something that needs building
