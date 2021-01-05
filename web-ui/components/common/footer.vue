@@ -1,5 +1,5 @@
 <template>
-  <div id="web-ui-footer" class="w-screen bg-gray-100">
+  <div id="web-ui-footer" class="bg-gray-100">
     <p class="text-xs text-gray-900 ml-2">
       Web API: <a :href="WebAPI_URL">{{ WebAPI_URL }}</a>
       <span class="divider">|</span>

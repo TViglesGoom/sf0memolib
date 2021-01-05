@@ -1,5 +1,5 @@
 <template>
-  <div id="horizon" class="h-screen w-screen">
+  <div id="horizon" class="h-screen">
     <app-notification-group class="z-0 absolute"></app-notification-group>
 
     <header-component></header-component>

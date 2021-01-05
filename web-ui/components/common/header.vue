@@ -1,5 +1,5 @@
 <template>
-  <div id="web-ui-header" class="text-gray-700 body-font bg-gray-100 w-screen">
+  <div id="web-ui-header" class="text-gray-700 body-font bg-gray-100">
     <div class="container mx-auto flex flex-wrap p-0 flex-col md:flex-row items-center">
       <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
         <span class="ml-3 text-xl">sf0port web-ui</span>
