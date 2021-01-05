@@ -1,15 +1,9 @@
 <template>
   <div id="web-ui-header" class="text-gray-700 body-font bg-gray-100 w-screen">
     <div class="container mx-auto flex flex-wrap p-0 flex-col md:flex-row items-center">
-      <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-        <span class="ml-3 text-xl">sf0port web-ui</span>
-      </a>
-
       <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
         <a class="mr-5 hover:text-gray-900">MemoLib ( {{numOfMemosInCollection}} docs)</a>
-        <a class="mr-5 hover:text-gray-900">Taxonomy</a>
-        <a class="mr-5 hover:text-gray-900">lorem</a>
-        <a class="mr-5 hover:text-gray-900">ipsum</a>
+        <a class="mr-5 hover:text-gray-900">Taxonomy (pending)</a>
       </nav>
 
       <form v-on:submit.prevent="triggerSearch">
