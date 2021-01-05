@@ -37,7 +37,8 @@
 
 <style scope="scss" scoped>
 #web-ui-header {
-  height: 36px;
+  height: auto;
+  padding: 10px 0;
 }
 </style>
 
