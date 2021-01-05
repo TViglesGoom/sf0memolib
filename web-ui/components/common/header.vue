@@ -6,10 +6,10 @@
       </a>
 
       <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-        <a class="mr-5 hover:text-gray-900">MemoLib ( {{numOfMemosInCollection}} docs)</a>
+        <a class="mr-5 hover:text-gray-900">
+          MemoLib ( {{ numOfMemosInCollection }} docs)
+        </a>
         <a class="mr-5 hover:text-gray-900">Taxonomy</a>
-        <a class="mr-5 hover:text-gray-900">lorem</a>
-        <a class="mr-5 hover:text-gray-900">ipsum</a>
       </nav>
 
       <form v-on:submit.prevent="triggerSearch">
