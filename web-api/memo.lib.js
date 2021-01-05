@@ -50,7 +50,7 @@ export const MemoLib = {
   listMemoCouchDocs: async () => {
     try {
       const response = await axios.get(`${COUCHDB_DATABASE_URL}/_all_docs?include_docs=true`)
-      return response['data']['rows']?.length ? response['data']['rows'] : [];
+      return response['data']['rows'].length ? response['data']['rows'] : [];
     } catch (error) {
       console.error({error})
     }
@@ -66,7 +66,7 @@ export const MemoLib = {
           ]
         }
       });
-      return response['data']['docs']?.length ? response['data']['docs'] : [];
+      return response['data']['docs'].length ? response['data']['docs'] : [];
     } catch (error) {
       console.error({error})
     }
