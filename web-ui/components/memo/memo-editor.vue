@@ -7,15 +7,15 @@ import TUIEditorComponent from '@/components/editors/tui.editor.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default Vue.extend({
+  components: {
+    VueTagsInput, // @ref: http://www.vue-tags-input.com/#/ , https://github.com/JohMun/vue-tags-input
+    editor: AceEditorComponent,
+    // editor: TUIEditorComponent,
+  },
   data() {
     return {
       tag: '',
-    };
-  },
-	components: {
-    VueTagsInput, // @ref: http://www.vue-tags-input.com/#/ , https://github.com/JohMun/vue-tags-input
-    'editor': AceEditorComponent,
-    //'editor': TUIEditorComponent,
+    }
   },
   computed: {
     ...mapGetters({
@@ -66,8 +66,9 @@ export default Vue.extend({
 
     <div v-if="!memoDocumentOpenInEditor" id="memo-editor-vacant" class="my-1 px-4 py-5 space-y-6 sm:p-6 sm:overflow-hidden object-center">
       <p class="text-center text-md font-sm text-gray-700 leading-loose">
-        Memo Editor is vacant<br/>
-        Create <button
+        Memo Editor is vacant<br />
+        Create
+        <button
           @click="newEditorMemo()"
           class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-olive-600 hover:bg-olive-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-olive-500"
         >New Memo</button> <br/>or open existing from collection &rarr;<br/>
@@ -78,9 +79,14 @@ export default Vue.extend({
     <div v-else id="memo-editor-occupied" class="my-1 px-4 py-5 space-y-6 sm:p-6 m-auto sm:overflow-hidden">
       <div v-if="true" class="mt-6 border-gray-300">
         <div class="mt-1 flex rounded-md shadow-sm">
-          <input type="text" name="memo_title" id="memo_title"
+          <input
+            v-model="memoTitle"
+            type="text"
+            name="memo_title"
+            id="memo_title"
             class="flex-1 block w-full text-sm rounded-md sm:text-xs"
-            placeholder="memo title" v-model="memoTitle">
+            placeholder="memo title"
+          />
         </div>
       </div>
 
