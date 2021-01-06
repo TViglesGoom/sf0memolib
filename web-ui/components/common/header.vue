@@ -1,50 +1,164 @@
 <template>
-  <div id="web-ui-header" class="text-gray-700 body-font bg-gray-100">
-    <div class="container mx-auto flex flex-wrap p-0 flex-col md:flex-row items-center">
-      <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-        <span class="ml-3 text-xl">sf0port web-ui</span>
-      </a>
-
-      <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-        <a class="mr-5 hover:text-gray-900">
-          MemoLib ( {{ numOfMemosInCollection }} docs)
+  <header>
+    <div id="web-ui-header">
+      <div id="left-part">
+        <a>
+          <span id="logo">sf0port web-ui</span>
         </a>
-        <a class="mr-5 hover:text-gray-900">Taxonomy</a>
-      </nav>
+      </div>
+      <div id="right-part">
+        <nav>
+          <a id="memolib-link">MemoLib ( {{ numOfMemosInCollection }} docs)</a>
+          <a>Taxonomy</a>
+        </nav>
 
-      <form v-on:submit.prevent="triggerSearch">
-        <div class="relative text-gray-600 focus-within:text-gray-400">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-            <button @click="triggerSearch"
-              class="p-1 focus:outline-none focus:shadow-outline">
-              <svg
-                fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
-                class="w-6 h-6">
-                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-              </svg>
-            </button>
-          </span>
-          <input
-            v-model="searchTerm"
-            type="search" placeholder="keyword search memo library" autocomplete="off"
-            class="py-1 text-sm text-white bg-gray-300 rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900">
-        </div>
-      </form>
-
+        <form @submit.prevent="triggerSearch">
+          <div>
+            <span>
+              <button @click="triggerSearch">
+<!--                <svg-->
+<!--                  fill="none"-->
+<!--                  stroke="currentColor"-->
+<!--                  stroke-linecap="round"-->
+<!--                  stroke-linejoin="round"-->
+<!--                  stroke-width="2"-->
+<!--                  viewBox="0 0 24 24"-->
+<!--                  class="w-6 h-6"-->
+<!--                >-->
+<!--                  <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>-->
+<!--                </svg>-->
+              </button>
+            </span>
+            <input
+              v-model="searchTerm"
+              type="search"
+              placeholder="keyword search memo library"
+              autocomplete="off"
+            />
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
+  </header>
 </template>
 
-<style scope="scss" scoped>
+<style lang="scss" scoped>
 #web-ui-header {
+  display: flex;
+  width: 100%;
   height: auto;
-  padding: 10px 0;
+  padding: 14px 0;
+  background-color: #403940;
+  color: #fff;
+
+  #left-part {
+    flex: 1;
+    display: inline-flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    #logo {
+      text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+      @keyframes flashing {
+        0% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        3% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        10% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        10.3% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        12% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        14% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        14.3% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        16% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        18% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        18.3% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        20% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        22% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        36% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        36.3% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        38% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        40% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        76% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        76.3% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        78% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        80% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        80.3% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        82% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        84% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        84.3% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 0.3);
+        }
+        86% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+        100% {
+          text-shadow: 0 0 0.9em rgba(255, 255, 255, 1);
+        }
+      }
+
+      animation: flashing 6s infinite;
+    }
+  }
+
+  #right-part {
+    display: inline-flex;
+    flex: 1;
+    justify-content: space-evenly;
+    align-items: center;
+    #memolib-link {
+      margin-right: 20px;
+    }
+  }
 }
 </style>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapGetters } from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 
 export default Vue.extend({
   data: () => {
@@ -55,8 +169,8 @@ export default Vue.extend({
   computed: {
     ...mapGetters({
       numOfMemosInCollection: 'memos/memosListLength',
-      //numOfSearchResults: 'memos/memosSearchResultsLength',
-    })
+      // numOfSearchResults: 'memos/memosSearchResultsLength',
+    }),
   },
   methods: {
     ...mapActions({
@@ -64,12 +178,13 @@ export default Vue.extend({
       searchMemoLibrary: 'memos/searchLib',
     }),
     async triggerSearch() {
-      if (this.searchTerm.length > 1) { // @todo min number of characters to search
-        await this.searchMemoLibrary( this.searchTerm );
+      if (this.searchTerm.length > 1) {
+        // @todo min number of characters to search
+        await this.searchMemoLibrary(this.searchTerm)
       } else {
-        await this.loadMemoLibrary();
+        await this.loadMemoLibrary()
       }
-    }
-  }
+    },
+  },
 })
 </script>

@@ -173,9 +173,9 @@ export const mutations = {
 
 export const getters = {
   memosList(state) {
-    return state.collection.map(item => {
+    return state.collection.map((item) => {
       return Object.assign({}, item, {
-        content: [], // @techdebt when list method stops featuring content - can stop cleaning it here
+        content: item.content[0], // @techdebt when list method stops featuring content - can stop cleaning it here
         stats: {
           'wc -l': item.content?.length,
           'tags': item.taxonomy?.length ? `[${item.taxonomy.join(', ')}]` : '0',

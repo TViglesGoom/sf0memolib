@@ -1,10 +1,10 @@
 <script lang="ts">
 import Vue from 'vue'
-import VueTagsInput from '@johmun/vue-tags-input';
+import VueTagsInput from '@johmun/vue-tags-input'
 
-import AceEditorComponent from '@/components/editors/ace.editor.vue';
-import TUIEditorComponent from '@/components/editors/tui.editor.vue';
-import { mapActions, mapGetters } from 'vuex';
+import AceEditorComponent from '@/components/editors/ace.editor.vue'
+import TUIEditorComponent from '@/components/editors/tui.editor.vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
   components: {
@@ -26,28 +26,28 @@ export default Vue.extend({
     }),
     memoTitle: {
       get() {
-        return this.docTitle;
+        return this.docTitle
       },
       set(newTitle) {
         this.$store.dispatch('memos/updateEditedMemoTitle', newTitle)
-      }
+      },
     },
     memoTaxonomy: {
       get() {
         return this.docTaxonomy.map((tagText: string) => {
           return {
             text: tagText,
-            tiClasses: ["ti-valid"],
+            tiClasses: ['ti-valid'],
           }
-        });
+        })
       },
       set(newTaxonomy: any[]) {
         this.$store.dispatch(
           'memos/updateEditedMemoTaxonomy',
-          newTaxonomy.map(tag => tag.text)
-        );
-      }
-    }
+          newTaxonomy.map((tag) => tag.text)
+        )
+      },
+    },
   },
   methods: {
     ...mapActions({
@@ -55,120 +55,259 @@ export default Vue.extend({
       saveEditorMemo: 'memos/saveMemoInEditor',
       closeEditorMemo: 'memos/closeMemoInEditor',
       dropEditorMemo: 'memos/deleteMemo',
-    })
-  }
-});
+    }),
+  },
+})
 </script>
 
 <template>
   <!--<div id="memo-editor-container" class="px-4 py-5 bg-white space-y-6 sm:p-6 m-auto shadow sm:rounded-md sm:overflow-hidden">-->
   <div id="memo-editor-container">
-
-    <div v-if="!memoDocumentOpenInEditor" id="memo-editor-vacant" class="my-1 px-4 py-5 space-y-6 sm:p-6 sm:overflow-hidden object-center">
-      <p class="text-center text-md font-sm text-gray-700 leading-loose">
+    <div v-if="!memoDocumentOpenInEditor" id="memo-editor-vacant">
+      <p id="new-memo-text">
         Memo Editor is vacant<br />
-        Create
+        Create<br />
         <button
+          id="new-memo-btn"
+          class="fuller-button white"
           @click="newEditorMemo()"
-          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-olive-600 hover:bg-olive-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-olive-500"
-        >New Memo</button> <br/>or open existing from collection &rarr;<br/>
-        ..and fix this fucking box to an <u>unhurt my eyes</u> standard or higher
+        >
+          New Memo
+        </button>
+        <br />
+        or open existing from collection &rarr;<br />
+        ..and fix this fucking box to an <u>unhurt my eyes</u> standard or
+        higher
       </p>
     </div>
 
-    <div v-else id="memo-editor-occupied" class="my-1 px-4 py-5 space-y-6 sm:p-6 m-auto sm:overflow-hidden">
-      <div v-if="true" class="mt-6 border-gray-300">
-        <div class="mt-1 flex rounded-md shadow-sm">
-          <input
-            v-model="memoTitle"
-            type="text"
-            name="memo_title"
-            id="memo_title"
-            class="flex-1 block w-full text-sm rounded-md sm:text-xs"
-            placeholder="memo title"
-          />
-        </div>
+    <div v-else id="memo-editor-occupied">
+      <div v-if="true" id="memo-title-container">
+        <input
+          id="memo-title"
+          v-model="memoTitle"
+          type="text"
+          name="memo-title"
+          placeholder="memo title"
+        />
       </div>
 
       <div>
-        <editor class="mt-1 flex rounded-md shadow-sm"
-          id="editor-driver"
-        ></editor>
+        <editor id="editor-driver"></editor>
       </div>
 
-      <div v-if="true" class="mt-6 border-gray-300"><!-- @todo taxonomy -->
-        <label class="block text-xs font-medium text-gray-700 mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+      <div v-if="true" id="taxonomy-container">
+        <!-- @todo taxonomy -->
+        <label id="taxonomy-label">
           <client-only>
             <vue-tags-input
               v-model="tag"
               :tags="memoTaxonomy"
-              @tags-changed="newTags => memoTaxonomy = newTags"
+              @tags-changed="(newTags) => (memoTaxonomy = newTags)"
             />
           </client-only>
         </label>
-
       </div>
 
-      <div v-if="true" class="mt-6"><!-- @todo file uploads -->
-        <label class="block text-xs font-medium text-gray-700">
+      <div v-if="true" id="taxonomy-upload-image">
+        <!-- @todo file uploads -->
+        <p id="taxonomy-p" class="regular-text">
           Attach files (will be stored as CouchDB document attachments)
-        </label>
-        <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-          <div class="space-y-1 text-center">
-            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <div class="flex text-sm text-gray-600">
-              <label for="file-upload"
-                class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                <span>Upload a file</span>
-                <input id="file-upload" name="file-upload" type="file" class="sr-only">
-              </label>
-              <p class="pl-1">or drag and drop</p>
-            </div>
-            <p class="text-xs text-gray-500">
-              PNG, JPG, GIF up to 10MB
-            </p>
-          </div>
+        </p>
+        <div id="upload-button" class="fuller-button white">
+          <svg
+            id="upload-svg"
+            stroke="currentColor"
+            fill="none"
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+            <path
+              d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <label id="upload-label" for="file-upload">
+            <p>Upload a file</p>
+            <p>or drag and drop</p>
+            <p>PNG, JPG, GIF up to 10MB</p>
+          </label>
+          <input
+            id="file-upload"
+            name="file-upload"
+            type="file"
+            class="sr-only"
+          />
         </div>
       </div>
 
-      <div class="px-4 py-3 text-right sm:px-6">
-        <button @click="dropEditorMemo()"
-          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-olive-500">
+      <div id="taxonomy-control-btns">
+        <button class="fuller-button red" @click="dropEditorMemo()">
           Delete
         </button>
-        <button @click="closeEditorMemo()"
-          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-olive-600 hover:bg-olive-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-olive-500">
+        <button class="fuller-button blue" @click="closeEditorMemo()">
           <span v-if="editorDocumentChanged">Discard</span>
           <span v-else>Close</span>
         </button>
-        <button @click="saveEditorMemo()"
-          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <button class="fuller-button white" @click="saveEditorMemo()">
           Save
         </button>
       </div>
     </div>
-
   </div>
-
 </template>
 
 <style lang="scss" scoped>
 #memo-editor-container {
-  height: calc(100vh - 72px);
+  height: 100%;
+
   #memo-editor-vacant {
-    //width: auto;
-    //height: auto;
-    background: white;
+    //my-1 px-4 py-5 space-y-6 sm:p-6 sm:overflow-hidden object-center
+    height: 100%;
+    //margin: 1px 0;
+    padding: 30% 5px 0;
+
+    #new-memo-text {
+      text-align: center;
+      margin: 0 50px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+
+      #new-memo-btn {
+        border: solid 2px #fff;
+        width: 100%;
+        margin-right: 0;
+        margin-left: 0;
+
+        //background-color: #00a4db;
+        &:hover {
+          color: rgba(0, 0, 0, 0.8);
+          background-color: #fff;
+          box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.3),
+            0 0 1.2em rgba(255, 255, 255, 0.5);
+        }
+      }
+    }
   }
+
   #memo-editor-occupied {
     //height: calc(100vh - 72px);
-    background: white;
+    #memo-title-container {
+      background-color: #000;
+
+      #memo-title {
+        width: 100%;
+        background-color: #333;
+        text-align: center;
+      }
+    }
+
+    #taxonomy-control-btns {
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        flex: 1;
+      }
+    }
 
     #editor-driver {
       //
     }
   }
+
+  #taxonomy-container {
+    border: 2px dashed lightgrey;
+    border-radius: 5px;
+    padding: 10px;
+
+    #taxonomy-label {
+      // block text-xs font-medium text-gray-700 mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  #taxonomy-upload-image {
+    #taxonomy-p {
+      margin-top: 50px;
+    }
+    #upload-button {
+      position: relative;
+      text-align: center;
+      margin: 20px 60px 60px;
+      cursor: pointer;
+      #upload-label {
+        cursor: pointer;
+      }
+      #upload-svg {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+
+  .fuller-button {
+    padding: 0.8em 0;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    -webkit-transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+    box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3),
+      0 0 0.8em rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 1);
+    background: none;
+    border-radius: 0;
+    margin: 1em;
+
+    &.blue {
+      box-shadow: inset 0 0 1em rgba(0, 170, 170, 0.5),
+        0 0 1em rgba(0, 170, 170, 0.5);
+      border: #0dd solid 2px;
+    }
+
+    &.blue:hover {
+      background-color: #0dd;
+      box-shadow: inset 0 0 0 rgba(0, 170, 170, 0.5),
+        0 0 1.5em rgba(0, 170, 170, 0.7);
+    }
+
+    &.red {
+      box-shadow: inset 0 0 1em rgba(251, 81, 81, 0.4),
+        0 0 1em rgba(251, 81, 81, 0.4);
+      border: #fb5454 solid 2px;
+    }
+
+    &.red:hover {
+      background-color: #fb5454;
+      box-shadow: inset 0 0 0 rgba(251, 81, 81, 0.4),
+        0 0 1.5em rgba(251, 81, 81, 0.6);
+    }
+
+    &.white {
+      box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3),
+        0 0 0.8em rgba(255, 255, 255, 0.3);
+      border: #fff solid 2px;
+    }
+
+    &.white:hover {
+      color: rgba(0, 0, 0, 0.8);
+      background-color: #fff;
+      box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.3),
+        0 0 1.2em rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+.regular-text {
+  font-family: Roboto, Arial, serif;
+  text-align: center;
+  //font-size: 20px;
+  letter-spacing: 2px;
 }
 </style>

@@ -15,7 +15,7 @@ export default Vue.extend({
         return this.couchDocContent || '';
       },
       set(content: String) {
-        console.log(`updating couchDoc, length: ${content.length}`);
+        // console.log(`updating couchDoc, length: ${content.length}`);
         this.$store.dispatch('memos/updateEditedMemoContent', content.split('\n'));
       },
     }

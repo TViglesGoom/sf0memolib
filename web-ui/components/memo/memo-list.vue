@@ -1,63 +1,70 @@
 <template>
-  <div id="memo-list" class="text-gray-900 overflow-y-scroll overscroll-y-contain overflow-x-none container">
+  <div id="memo-list">
     <!-- @enhance: add "active" styling for when document is open for editing -->
     <div
-      @click="openMemo(memo['_id'])" :id="`memo-list-item-${memo['_id']}`"
-      v-for="memo in memosList" :key="memo._id" :title="`Open document in memo editor`"
-      class="memo-list-item inline-block border-b border-light-blue-400 flex justify-between items-center shadow mx-1 my-1 cursor-pointer hover:bg-gray-100 bg-gray-50">
-
-      <div class="flex items-start w-6/10">
-        <div class="memo-list-item-icon mr-3 p-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="gray"
-            class="rounded-full h-12 w-12 m-auto"
-          >
-            <path
-              stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
-        </div>
-        <div class="memo-list-item-info flex-1 overflow-hidden">
-          <div class="memo-list-item-info-stats">
-            <span class="stats-readout text-gray-700 text-xs">
-              <span class="readout-label">wc -l: </span>
-              <span class="readout-value">{{memo.stats['wc -l']}}</span>
-            </span>
-            <span class="stats-divider text-gray-400"> | </span>
-            <span class="stats-readout text-gray-700 text-xs">
-              <span class="readout-label">tags: </span>
-              <span class="readout-value">
-                <!--{{memo.stats['tags #']}}-->
-                {{memo.stats['tags']}}
-              </span>
-            </span>
-            <span class="stats-divider text-gray-400" v-if="false"> | </span>
-            <span class="stats-readout text-gray-700 text-xs"  v-if="false">
+      v-for="memo in memosList"
+      :id="`memo-list-item-${memo['_id']}`"
+      :key="memo._id"
+      :title="`Open document in memo editor`"
+      @click="openMemo(memo['_id'])"
+    >
+<!--      <div>-->
+        <!--        <div class="memo-list-item-icon mr-3 p-2">-->
+        <!--          <svg-->
+        <!--            xmlns="http://www.w3.org/2000/svg"-->
+        <!--            fill="none"-->
+        <!--            viewBox="0 0 24 24"-->
+        <!--            stroke="gray"-->
+        <!--            class="rounded-full h-12 w-12 m-auto"-->
+        <!--          >-->
+        <!--            <path-->
+        <!--              stroke-linecap="round"-->
+        <!--              stroke-linejoin="round"-->
+        <!--              stroke-width="1"-->
+        <!--              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"-->
+        <!--            />-->
+        <!--          </svg>-->
+        <!--        </div>-->
+        <div id="doc-info">
+          <div>
+            <p>{{ memo.title }}</p>
+            <span v-if="false"> | </span>
+            <span v-if="false">
               <span class="readout-label">created: </span>
               <span class="readout-value">00:00:00<!-- @todo --></span>
             </span>
-            <span class="stats-divider text-gray-400" v-if="false"> | </span>
-            <span class="stats-readout text-gray-700 text-xs" v-if="false">
+            <span v-if="false"> | </span>
+            <span v-if="false">
               <span class="readout-label">updated: </span>
               <span class="readout-value">00:00:00<!-- @todo --></span>
             </span>
           </div>
-          <p class="memo-list-item-info-metadata-line text-gray-700 text-xs">
-            <span class="metadata-line-label">src: </span>
-            <span class="metadata-line-value">{{ memo.source }}</span>
+          <p>
+            <span>src: </span>
+            <span>{{ memo.source }}</span>
           </p>
-          <p class="memo-list-item-info-metadata-line text-gray-700 text-xs">
-            <span class="metadata-line-label">_id: </span>
-            <span class="metadata-line-value">{{ memo._id }}</span>
-          </p>
-          <p class="memo-list-item-info-metadata-line text-gray-700 text-xs">
-            <span class="metadata-line-label">_rev: </span>
-            <span class="metadata-line-value">{{ memo._rev }}</span>
-          </p>
+          <span>
+            <span>wc -l: </span>
+            <span>{{ memo.stats['wc -l'] }}</span>
+          </span>
+          <span> | </span>
+          <span>
+            <span class="readout-label">tags: </span>
+            <span class="readout-value">
+              <!--{{memo.stats['tags #']}}-->
+              {{ memo.stats['tags'] }}
+            </span>
+          </span>
+          <!--          <p>-->
+          <!--            <span>_id: </span>-->
+          <!--            <span>{{ memo._id }}</span>-->
+          <!--          </p>-->
+          <!--          <p>-->
+          <!--            <span>_rev: </span>-->
+          <!--            <span>{{ memo._rev }}</span>-->
+          <!--          </p>-->
         </div>
       </div>
-      <p class="memo-list-item-title w-4/10 text-right text-gray-700 text-sm mr-2">{{ memo.title }}</p>
 
       <!--<button
         @click="openMemo(memo['_id'])" :title="`Edit MEMO:\n{\n\t_id: ${memo._id}\n\t_rev: ${memo._id}\n}`"
@@ -96,58 +103,41 @@
         </svg>
       </button>-->
     </div>
-  </div>
+<!--  </div>-->
 </template>
 
 <style lang="scss" scoped>
 #memo-list {
-  height: calc(100vh - 72px);
-
-  .memo-list-item {
-    font-size: 0.76em;
-    .memo-list-item-icon {
-      opacity: .4;
-    }
-    .memo-list-item-info {
-      .memo-list-item-info-stats {
-        span.stats-readout {
-          span.readout-label {
-            font-style: normal;
-            opacity: .8;
-          }
-          span.readout-value {
-            font-weight: normal;
-            font-family: 'Courier New', Courier, monospace;
-          }
-        }
-        span.stats-divider {
-          // todo
-        }
-      }
-      .memo-list-item-info-metadata-line {
-        .metadata-line-label {
-          font-style: normal;
-          opacity: .8;
-          display: inline-block;
-          min-width: 36px;
-        }
-        .metadata-line-value {
-          font-weight: normal;
-          font-family: 'Courier New', Courier, monospace;
-        }
-      }
-    }
-    .memo-list-item-title {
-      font-family: 'Courier New', Courier, monospace;
-    }
+  position: relative;
+  height: 100%;
+  table-layout: fixed;
+  overflow-y: scroll;
+  padding-right: 20px;
+  max-height: inherit;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  #doc-info {
+    position: relative;
+    z-index: 1;
+    top: 10px;
+    left: 10px;
+    color: #fff;
+    font-family: Roboto, Arial, serif;
+    cursor: pointer;
+    border: solid 1px #fff;
+    padding: 6px 10px;
+    margin-bottom: 10px;
   }
 }
 </style>
 
 <script lang="ts">
 // @todo fix typescript
-import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
+import Vue from 'vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
   data: () => {
@@ -169,22 +159,23 @@ export default Vue.extend({
         'font-medium',
         'rounded-md',
         'text-grey-900',
-        'w-6', 'h-6'
-      ]
+        'w-6',
+        'h-6',
+      ],
     }
   },
   // @ref: https://github.com/davidroyer/nuxt-api-example/blob/master/components/Header.vue
   computed: {
     ...mapGetters({
       memosList: 'memos/memosList',
-    })
+    }),
   },
   methods: {
     ...mapActions({
       openMemo: 'memos/openMemoInEditor',
       saveMemo: 'memos/saveMemoInEditor',
       deleteMemo: 'memos/deleteMemo',
-    })
-  }
-});
+    }),
+  },
+})
 </script>
