@@ -8,65 +8,65 @@
       :title="`Open document in memo editor`"
       @click="openMemo(memo['_id'])"
     >
-<!--      <div>-->
-        <!--        <div class="memo-list-item-icon mr-3 p-2">-->
-        <!--          <svg-->
-        <!--            xmlns="http://www.w3.org/2000/svg"-->
-        <!--            fill="none"-->
-        <!--            viewBox="0 0 24 24"-->
-        <!--            stroke="gray"-->
-        <!--            class="rounded-full h-12 w-12 m-auto"-->
-        <!--          >-->
-        <!--            <path-->
-        <!--              stroke-linecap="round"-->
-        <!--              stroke-linejoin="round"-->
-        <!--              stroke-width="1"-->
-        <!--              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"-->
-        <!--            />-->
-        <!--          </svg>-->
-        <!--        </div>-->
-        <div id="doc-info">
-          <div>
-            <p>{{ memo.title }}</p>
-            <span v-if="false"> | </span>
-            <span v-if="false">
-              <span class="readout-label">created: </span>
-              <span class="readout-value">00:00:00<!-- @todo --></span>
-            </span>
-            <span v-if="false"> | </span>
-            <span v-if="false">
-              <span class="readout-label">updated: </span>
-              <span class="readout-value">00:00:00<!-- @todo --></span>
-            </span>
-          </div>
-          <p>
-            <span>src: </span>
-            <span>{{ memo.source }}</span>
-          </p>
-          <span>
-            <span>wc -l: </span>
-            <span>{{ memo.stats['wc -l'] }}</span>
+      <!--      <div>-->
+      <!--        <div class="memo-list-item-icon mr-3 p-2">-->
+      <!--          <svg-->
+      <!--            xmlns="http://www.w3.org/2000/svg"-->
+      <!--            fill="none"-->
+      <!--            viewBox="0 0 24 24"-->
+      <!--            stroke="gray"-->
+      <!--            class="rounded-full h-12 w-12 m-auto"-->
+      <!--          >-->
+      <!--            <path-->
+      <!--              stroke-linecap="round"-->
+      <!--              stroke-linejoin="round"-->
+      <!--              stroke-width="1"-->
+      <!--              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"-->
+      <!--            />-->
+      <!--          </svg>-->
+      <!--        </div>-->
+      <div id="doc-info">
+        <div>
+          <p>{{ memo.title }}</p>
+          <span v-if="false"> | </span>
+          <span v-if="false">
+            <span class="readout-label">created: </span>
+            <span class="readout-value">00:00:00<!-- @todo --></span>
           </span>
-          <span> | </span>
-          <span>
-            <span class="readout-label">tags: </span>
-            <span class="readout-value">
-              <!--{{memo.stats['tags #']}}-->
-              {{ memo.stats['tags'] }}
-            </span>
+          <span v-if="false"> | </span>
+          <span v-if="false">
+            <span class="readout-label">updated: </span>
+            <span class="readout-value">00:00:00<!-- @todo --></span>
           </span>
-          <!--          <p>-->
-          <!--            <span>_id: </span>-->
-          <!--            <span>{{ memo._id }}</span>-->
-          <!--          </p>-->
-          <!--          <p>-->
-          <!--            <span>_rev: </span>-->
-          <!--            <span>{{ memo._rev }}</span>-->
-          <!--          </p>-->
         </div>
+        <p>
+          <span>src: </span>
+          <span>{{ memo.source }}</span>
+        </p>
+        <span>
+          <span>wc -l: </span>
+          <span>{{ memo.stats['wc -l'] }}</span>
+        </span>
+        <span> | </span>
+        <span>
+          <span class="readout-label">tags: </span>
+          <span class="readout-value">
+            <!--{{memo.stats['tags #']}}-->
+            {{ memo.stats['tags'] }}
+          </span>
+        </span>
+        <!--          <p>-->
+        <!--            <span>_id: </span>-->
+        <!--            <span>{{ memo._id }}</span>-->
+        <!--          </p>-->
+        <!--          <p>-->
+        <!--            <span>_rev: </span>-->
+        <!--            <span>{{ memo._rev }}</span>-->
+        <!--          </p>-->
       </div>
+    </div>
 
-      <!--<button
+    <!--<button
         @click="openMemo(memo['_id'])" :title="`Edit MEMO:\n{\n\t_id: ${memo._id}\n\t_rev: ${memo._id}\n}`"
         :class="ctrlButtonClassList">
         <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,7 +78,7 @@
             />
         </svg>
       </button>-->
-      <!--<button
+    <!--<button
         @click="saveMemo()" :title="`Save changes to MEMO:\n{\n\t_id: ${memo._id}\n\t_rev: ${memo._id}\n}`"
         :class="ctrlButtonClassList">
         <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -90,7 +90,7 @@
           />
         </svg>
       </button>-->
-      <!--<button
+    <!--<button
         @click="deleteMemo(memo['_id'])" :title="`PERMANENTLY(!) delete MEMO:\n{\n\t_id: ${memo._id}\n\t_rev: ${memo._id}\n}`"
         :class="ctrlButtonClassList">
         <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -102,18 +102,19 @@
           />
         </svg>
       </button>-->
-    </div>
-<!--  </div>-->
+  </div>
+  <!--  </div>-->
 </template>
 
 <style lang="scss" scoped>
 #memo-list {
-  position: relative;
-  height: 100%;
-  table-layout: fixed;
-  overflow-y: scroll;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding-right: 20px;
-  max-height: inherit;
+  overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -121,7 +122,6 @@
   }
   #doc-info {
     position: relative;
-    z-index: 1;
     top: 10px;
     left: 10px;
     color: #fff;

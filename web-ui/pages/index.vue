@@ -39,9 +39,10 @@
       background-color: #333;
     }
     #web-ui-right-col {
-      padding: 12px;
+      position: relative;
       flex: 1;
       height: 100%;
+      padding: 12px;
       background-color: #333;
     }
   }
