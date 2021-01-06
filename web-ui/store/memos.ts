@@ -51,7 +51,7 @@ export const actions = {
         content: [],
         title: `memo ${new Date().toLocaleString()}`,
         taxonomy: [],
-        source: 'sf0port web-ui'
+        source: 'mem0lib web-ui'
       };
       const response = await axios.post(`http://0.0.0.0:3001/v0.0.1/memo/couch`, blankMemoDocument);
       commit('setMemoInEditor', response['data']['memoDoc']);
@@ -116,9 +116,6 @@ export const actions = {
       );
     }
   },
-  //logEvent({ commit }, appEvent: string) {
-  //  commit('addNotificationToLog', appEvent);
-  //}
   displayNotification({}, message: string) {
     Vue.prototype.$notify(
       { group: "appNotifications", type: "info", text: message || 'blah' }, 5 * 1000,
@@ -137,9 +134,6 @@ export const actions = {
 }
 
 export const mutations = {
-  //addNotificationToLog(state, message: string) {
-  //  state.eventLog.push(`${new Date().toLocaleString()} :: ${message}`);
-  //},
   setCollection(state, newCollection) {
     state.collection = newCollection;
   },
@@ -175,7 +169,7 @@ export const getters = {
   memosList(state) {
     return state.collection.map((item) => {
       return Object.assign({}, item, {
-        content: item.content[0], // @techdebt when list method stops featuring content - can stop cleaning it here
+        content: item.content[0],
         stats: {
           'wc -l': item.content?.length,
           'tags': item.taxonomy?.length ? `[${item.taxonomy.join(', ')}]` : '0',

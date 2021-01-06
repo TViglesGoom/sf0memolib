@@ -1,7 +1,7 @@
 {
-  "name": "sf0port /web-api documentation",
+  "name": "mem0lib /web-api documentation",
   "version": "0.0.1",
-  "description": "Documentation for the sf0port /web-api",
+  "description": "Documentation for the mem0lib /web-api",
   "title": "Custom apiDoc browser title",
   "url" : "http://0.0.0.0:3001/v0.0.1/doc",
   "sampleUrl": "http://0.0.0.0:3001/v0.0.1/",
