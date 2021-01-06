@@ -1,5 +1,5 @@
 {
-  "name": "sf0port_web-api",
+  "name": "mem0lib_web-api",
   "version": "0.0.1",
   "description": "HTTP API supporting Web UI connectivity to data-puddle layer and imports from filesystem",
   "type": "module",
@@ -8,7 +8,6 @@
     "dev": "node ./app.js",
     "doc:build": "apidoc -f ./app.js -f ./memo.lib.js -o ./doc"
   },
-  "author": "Val Redchenko",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.0",

@@ -5,7 +5,7 @@ define({ "api": [
     "title": "Return API navigation information. Temporary landing page.",
     "name": "web-api",
     "version": "0.0.1",
-    "group": "sf0port",
+    "group": "mem0lib",
     "success": {
       "fields": {
         "Success 200": [
@@ -20,7 +20,7 @@ define({ "api": [
       }
     },
     "filename": "./app.js",
-    "groupTitle": "sf0port",
+    "groupTitle": "mem0lib",
     "sampleRequest": [
       {
         "url": "http://0.0.0.0:3001"
@@ -33,7 +33,7 @@ define({ "api": [
     "title": "Hosts generated API documentation",
     "name": "web-api",
     "version": "0.0.1",
-    "group": "sf0port",
+    "group": "mem0lib",
     "success": {
       "fields": {
         "Success 200": [
@@ -48,7 +48,7 @@ define({ "api": [
       }
     },
     "filename": "./app.js",
-    "groupTitle": "sf0port",
+    "groupTitle": "mem0lib",
     "sampleRequest": [
       {
         "url": "http://0.0.0.0:3001/v0.0.1"
@@ -61,7 +61,7 @@ define({ "api": [
     "title": "List memos in CouchDB collection",
     "name": "web-api",
     "version": "0.0.1",
-    "group": "sf0port",
+    "group": "mem0lib",
     "success": {
       "fields": {
         "Success 200": [
@@ -76,7 +76,7 @@ define({ "api": [
       }
     },
     "filename": "./app.js",
-    "groupTitle": "sf0port",
+    "groupTitle": "mem0lib",
     "sampleRequest": [
       {
         "url": "http://0.0.0.0:3001/v0.0.1/memo/couch/list"
@@ -89,7 +89,7 @@ define({ "api": [
     "title": "Search memos in CouchDB collection by keyword",
     "name": "web-api",
     "version": "0.0.1",
-    "group": "sf0port",
+    "group": "mem0lib",
     "success": {
       "fields": {
         "Success 200": [
@@ -104,7 +104,7 @@ define({ "api": [
       }
     },
     "filename": "./app.js",
-    "groupTitle": "sf0port",
+    "groupTitle": "mem0lib",
     "sampleRequest": [
       {
         "url": "http://0.0.0.0:3001/v0.0.1/memo/couch/search/<regexp>"
@@ -117,7 +117,7 @@ define({ "api": [
     "title": "Get memo document by ID",
     "name": "web-api",
     "version": "0.0.1",
-    "group": "sf0port",
+    "group": "mem0lib",
     "success": {
       "fields": {
         "Success 200": [
@@ -132,7 +132,7 @@ define({ "api": [
       }
     },
     "filename": "./app.js",
-    "groupTitle": "sf0port",
+    "groupTitle": "mem0lib",
     "sampleRequest": [
       {
         "url": "http://0.0.0.0:3001/v0.0.1/memo/couch/<id>"
@@ -145,7 +145,7 @@ define({ "api": [
     "title": "Create new CouchDB document",
     "name": "web-api",
     "version": "0.0.1",
-    "group": "sf0port",
+    "group": "mem0lib",
     "success": {
       "fields": {
         "Success 200": [
@@ -160,7 +160,7 @@ define({ "api": [
       }
     },
     "filename": "./app.js",
-    "groupTitle": "sf0port",
+    "groupTitle": "mem0lib",
     "sampleRequest": [
       {
         "url": "http://0.0.0.0:3001/v0.0.1/memo/couch"
@@ -173,7 +173,7 @@ define({ "api": [
     "title": "Update existing CouchDB document",
     "name": "web-api",
     "version": "0.0.1",
-    "group": "sf0port",
+    "group": "mem0lib",
     "success": {
       "fields": {
         "Success 200": [
@@ -188,7 +188,7 @@ define({ "api": [
       }
     },
     "filename": "./app.js",
-    "groupTitle": "sf0port",
+    "groupTitle": "mem0lib",
     "sampleRequest": [
       {
         "url": "http://0.0.0.0:3001/v0.0.1/memo/couch/<id>"
@@ -201,7 +201,7 @@ define({ "api": [
     "title": "Delete a CouchDB memo document",
     "name": "web-api",
     "version": "0.0.1",
-    "group": "sf0port",
+    "group": "mem0lib",
     "success": {
       "fields": {
         "Success 200": [
@@ -216,7 +216,7 @@ define({ "api": [
       }
     },
     "filename": "./app.js",
-    "groupTitle": "sf0port",
+    "groupTitle": "mem0lib",
     "sampleRequest": [
       {
         "url": "http://0.0.0.0:3001/v0.0.1/memo/couch/<id>/<rev>"
