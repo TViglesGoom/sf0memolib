@@ -21,8 +21,29 @@ WHITE='\033[1;37m'
 # echo -e "I ${RED}love${NC} Stack Overflow"
 
 BASE_PATH=$(pwd)
+DEV_SESSION_NAME="memolib-dev"
+PROD_SESSION_NAME="memolib-build"
 
-if [ $1 == 'db:init' ]
+if [ $1 == 'dev' ]
+then
+
+	echo "statring development mode"
+	./mem0lib db:up
+	tmux kill-session -t $DEV_SESSION_NAME
+	tmux new-session -d -s $DEV_SESSION_NAME
+	tmux neww -n web-api -t $DEV_SESSION_NAME: 'cd ./web-api && npm run dev'
+	tmux neww -n web-ui -t $DEV_SESSION_NAME: 'cd ./web-ui && npm run dev'
+	tmux a -t $DEV_SESSION_NAME
+elif [ $1 == 'prod' ]
+then
+	echo "building production version"
+	./mem0lib db:up
+	tmux kill-session -t $PROD_SESSION_NAME
+	tmux new-session -d -s $PROD_SESSION_NAME
+	tmux neww -n web-api -t $PROD_SESSION_NAME: 'cd ./web-api && npm run build'
+	tmux neww -n web-ui -t $PROD_SESSION_NAME: 'cd ./web-ui && npm run build'
+	tmux a -t $PROD_SESSION_NAME
+elif [ $1 == 'db:init' ]
 then
   echo "building CouchDB service"
   docker build -t sf0/dpuddle-couchdb ./databases/couchdb
@@ -52,7 +73,7 @@ then
   # ..
 elif [ $1 == 'install' ]
 then
-  # cp "$BASE_PATH/.env.example" "$BASE_PATH/.env"
+  cp "$BASE_PATH/.env.example" "$BASE_PATH/.env"
 elif [ $1 == 'uninstall' ]
 then
   rm -rf .env

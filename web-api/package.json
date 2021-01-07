@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node ./app.js",
+    "build": "node ./app.js",
     "doc:build": "apidoc -f ./app.js -f ./memo.lib.js -o ./doc"
   },
   "license": "MIT",
