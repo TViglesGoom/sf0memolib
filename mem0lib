@@ -26,10 +26,12 @@ PROD_SESSION_NAME="memolib-build"
 
 if [ $1 == 'dev' ]
 then
-
 	echo "statring development mode"
 	./mem0lib db:up
-	tmux kill-session -t $DEV_SESSION_NAME
+	if [ tmux has-session $DEV_SESSION_NAME ]
+	then
+		tmux kill-session -t $DEV_SESSION_NAME
+	fi
 	tmux new-session -d -s $DEV_SESSION_NAME
 	tmux neww -n web-api -t $DEV_SESSION_NAME: 'cd ./web-api && npm run dev'
 	tmux neww -n web-ui -t $DEV_SESSION_NAME: 'cd ./web-ui && npm run dev'
@@ -38,7 +40,10 @@ elif [ $1 == 'prod' ]
 then
 	echo "building production version"
 	./mem0lib db:up
-	tmux kill-session -t $PROD_SESSION_NAME
+	if [ tmux has-session $DEV_SESSION_NAME ]
+	then
+		tmux kill-session -t $PROD_SESSION_NAME
+	fi
 	tmux new-session -d -s $PROD_SESSION_NAME
 	tmux neww -n web-api -t $PROD_SESSION_NAME: 'cd ./web-api && npm run build'
 	tmux neww -n web-ui -t $PROD_SESSION_NAME: 'cd ./web-ui && npm run build'
