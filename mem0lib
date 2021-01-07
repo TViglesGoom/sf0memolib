@@ -28,7 +28,8 @@ if [ $1 == 'dev' ]
 then
 	echo "statring development mode"
 	./mem0lib db:up
-	if [ tmux has-session $DEV_SESSION_NAME ]
+	tmux has-session -t $DEV_SESSION_NAME 2>/dev/null
+	if [ $? == 0 ]
 	then
 		tmux kill-session -t $DEV_SESSION_NAME
 	fi
@@ -40,7 +41,8 @@ elif [ $1 == 'prod' ]
 then
 	echo "building production version"
 	./mem0lib db:up
-	if [ tmux has-session $DEV_SESSION_NAME ]
+	tmux has-session -t $PROD_SESSION_NAME 2>/dev/null
+	if [ $? == 0 ]
 	then
 		tmux kill-session -t $PROD_SESSION_NAME
 	fi
