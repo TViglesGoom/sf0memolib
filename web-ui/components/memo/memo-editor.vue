@@ -12,6 +12,12 @@ export default Vue.extend({
     editor: AceEditorComponent,
     // editor: TUIEditorComponent,
   },
+  props: {
+    setData: {
+      type: Function,
+      default: () => {},
+    },
+  },
   data() {
     return {
       tag: '',
@@ -144,7 +150,16 @@ export default Vue.extend({
       </div>
 
       <div id="taxonomy-control-btns">
-        <button class="fuller-button red" @click="dropEditorMemo()">
+        <button
+          class="fuller-button red"
+          @click="
+            setData({
+              isAsking: true,
+              message: 'Are you sure you want to delete this memo?',
+              confirmMethod: dropEditorMemo,
+            })
+          "
+        >
           Delete
         </button>
         <button class="fuller-button blue" @click="closeEditorMemo()">
@@ -159,7 +174,7 @@ export default Vue.extend({
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #memo-editor-container {
   height: 100%;
 
@@ -251,60 +266,61 @@ export default Vue.extend({
       }
     }
   }
+}
 
-  .fuller-button {
-    padding: 0.8em 0;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    -webkit-transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
-    transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+.fuller-button {
+  padding: 0.8em 0;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  -webkit-transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+  box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3),
+    0 0 0.8em rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 1);
+  background: none;
+  border-radius: 0;
+  margin: 1em;
+
+  &.blue {
+    box-shadow: inset 0 0 1em rgba(0, 170, 170, 0.5),
+      0 0 1em rgba(0, 170, 170, 0.5);
+    border: #0dd solid 2px;
+  }
+
+  &.blue:hover {
+    background-color: #0dd;
+    box-shadow: inset 0 0 0 rgba(0, 170, 170, 0.5),
+      0 0 1.5em rgba(0, 170, 170, 0.7);
+  }
+
+  &.red {
+    box-shadow: inset 0 0 1em rgba(251, 81, 81, 0.4),
+      0 0 1em rgba(251, 81, 81, 0.4);
+    border: #fb5454 solid 2px;
+  }
+
+  &.red:hover {
+    background-color: #fb5454;
+    box-shadow: inset 0 0 0 rgba(251, 81, 81, 0.4),
+      0 0 1.5em rgba(251, 81, 81, 0.6);
+  }
+
+  &.white {
     box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3),
       0 0 0.8em rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 1);
-    background: none;
-    border-radius: 0;
-    margin: 1em;
+    border: #fff solid 2px;
+  }
 
-    &.blue {
-      box-shadow: inset 0 0 1em rgba(0, 170, 170, 0.5),
-        0 0 1em rgba(0, 170, 170, 0.5);
-      border: #0dd solid 2px;
-    }
-
-    &.blue:hover {
-      background-color: #0dd;
-      box-shadow: inset 0 0 0 rgba(0, 170, 170, 0.5),
-        0 0 1.5em rgba(0, 170, 170, 0.7);
-    }
-
-    &.red {
-      box-shadow: inset 0 0 1em rgba(251, 81, 81, 0.4),
-        0 0 1em rgba(251, 81, 81, 0.4);
-      border: #fb5454 solid 2px;
-    }
-
-    &.red:hover {
-      background-color: #fb5454;
-      box-shadow: inset 0 0 0 rgba(251, 81, 81, 0.4),
-        0 0 1.5em rgba(251, 81, 81, 0.6);
-    }
-
-    &.white {
-      box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3),
-        0 0 0.8em rgba(255, 255, 255, 0.3);
-      border: #fff solid 2px;
-    }
-
-    &.white:hover {
-      color: rgba(0, 0, 0, 0.8);
-      background-color: #fff;
-      box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.3),
-        0 0 1.2em rgba(255, 255, 255, 0.5);
-    }
+  &.white:hover {
+    color: rgba(0, 0, 0, 0.8);
+    background-color: #fff;
+    box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.3),
+      0 0 1.2em rgba(255, 255, 255, 0.5);
   }
 }
 
 .regular-text {
+  color: white;
   font-family: Roboto, Arial, serif;
   text-align: center;
   //font-size: 20px;
