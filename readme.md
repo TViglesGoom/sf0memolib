@@ -14,11 +14,11 @@ Core features:
 
 App is made possible by the collective genius of contributors from numerous FLOSS projects, to name a few:
 
-- Vue.js (@todo: add URLs to homepage and sources)
-- Nuxt.js  (@todo: add URLs to homepage and sources)
-- nuxt/content module (@todo: add URLs to homepage and sources)
-- Ace Editor  (@todo: add URLs to homepage and sources)
-- CouchDB  (@todo: add URLs to homepage and sources)
+- [Vue.js](https://vuejs.org/)
+- [Nuxt.js](https://nuxtjs.org/)
+- [nuxt/content module](https://content.nuxtjs.org/)
+- [Ace Editor](https://ace.c9.io/)
+- [CouchDB](https://couchdb.apache.org/)
 - PouchDB (pending)
 
 ## getting started
@@ -33,7 +33,82 @@ App is made possible by the collective genius of contributors from numerous FLOS
 
 ### starting for the first time
 
+#### web-ui only
+
+```bash
+# install dependencies
+$ npm install
+
+# serve with hot reload at localhost:3000
+$ npm run dev
+
+# build for production and launch server
+$ npm run build
+$ npm run start
+
+# generate static project
+$ npm run generate
+```
+
+#### web-api only
+
+```bash
+# install dependencies
+$ npm install
+
+# serve with hot reload at localhost:3000
+$ npm run dev
+```
+
+#### run coach-db docker container
+
+```bash
+# build a container for the first time
+$ ./mem0lib db:init
+
+# up docker container
+$ ./mem0lib db:up
+
+# create table for the first time
+# put your configuration into <>
+$ curl -X PUT <HOST>:<PORT>/<TABLE_NAME>
+```
+
+#### run everything in one tmux session
+
+```bash
+# initialize container and create table as in the above example
+$ ./mem0lib db:init
+$ ./mem0lib db:up
+$ curl -X PUT <HOST>:<PORT>/<TABLE_NAME>
+
+# use the script to run tmux session
+
+# for development purposes
+$ ./mem0lib dev
+
+# for production
+$ ./mem0lib prod
+```
+
 See `./mem0lib --help` for app init, start, stop.
+
+### env variables
+
+As an example of your .env file, you can use [.env.example](.env.example) file.
+
+#### Environment variables description
+- `API_HOST` server address. Should match the pattern "<CONNECTION_METHOD>://<SERVER_IP_ADDRESS>"
+- `API_PORT` indicates the port that the server is listening for the requests 
+- `API_VERSION` version of server api
+- `COUCHDB_HOST` ip address of server which runs couchdb
+- `COUCHDB_PORT` port for the couchdb requests to the `COUCHDB_HOST`
+- `COUCHDB_MEMOS_COLLECTION` table name to access in couchdb
+- `COUCHDB_ADMIN_PREFIX` path to couchdb admin (ui) page
+- `COUCHDB_USER` couchdb user for authorization
+- `COUCHDB_PWD` couchdb password for `COUCHDB_USER`
+- `WEBUI_PORT` port which is used to access ui of the application (currently on localhost)
+
 
 ### self-hosting
 
@@ -42,58 +117,3 @@ See `./mem0lib --help` for app init, start, stop.
 ### auto-generated Web API documentation
 
 Is available under: @document, for details see `./web-api/apidoc.json`
-
-## dev scope:
-
-App configuration
-- [ ] add `mem0lib-config.default.conf.js` example configuration (with comments)
-  - [ ] general application configuration settings
-  - [ ] feature-flags
-  - [ ] feature-specific configuration
-
-ENV VARS
-- [ ] consolidate environment variables from API, UI and CouchDB sub-directories into
-  a single `.env.example` at repo root
-  - [ ] document each env variable in `./readme.md`
-
-README
-- [ ] consolidate all useful info from `web-api/readme.md` and `web-ui/readme.md` into
-  a single file (`./readme.md`) at project base dir (this file)
-
-Project-specific scripts using `tmux`
-- [ ] add development and production convenience commands using `tmux`, derive tmux configuration files accordingly
-
-Taxonomy
-- [ ] implement `taxonomy.lib.js` and Web API endpoints (merging core tags listed in `@nuxt/content` with dynamic ones served CouchDB view)
-- [ ] extend `vue-tag-input` input in Memo Editor UI with additional settings and styling
-- [ ] implement dynamic taxonomy via CouchDB design views
-
-UI Appearance
-- [ ] re-work UI prototypes into permanent stylesheets
-- [ ] fix appearance and screen position of UI notifications
-- [ ] re-work UX and appearance of list view items
-
-Functional
-- [ ] CouchDB (and inherently Web API memo lists to return memos stripped of `content` itself)
-- [ ] address techdebt implementation of memo editor change detection in Web UI
-- [ ] separate storage of memo list and search results in vuex state 
-
-Memo Editor Buttons
-- [ ] prevent accidental loss of unsaved changes in editor when discarding
-
-Memo Editor
-- [ ] explore and expose additional Ace Editor capabilities
-  - [ ] configuration
-  - [ ] themes
-  - [ ] plugins, syntax highlighter and file format options
-
-Memo List
-- [ ] implement sorting memos in list by metadata: `createdAt`, `updatedAt`, memo size (lines, content-length), has attachment, etc
-
-### further development
-
-- [ ] implement keyboard shortcuts in Web UI (for search and memo editor actions)
-- [ ] develop search box into a hybrid command/search box (akin `Ctrl+P` in Codium)
-- [ ] advanced search options
-- [ ] memo list: *group by* and *filter by* taxonomy tags
-- [ ] to be continued...
