@@ -19,10 +19,12 @@ app.use(function(req, res, next) {
 
 // @todo global .env via pm2, fallback to local .env
 // @todo merge with environment constants in `memo.lib.js`
-const API_PORT = '3001';
-const WEBUI_PORT = '3000';
-const API_HOST = 'http://0.0.0.0';
-const API_VERSION = 'v0.0.1';
+import dotenv from 'dotenv'
+dotenv.config({ path: '../.env' })
+
+const { API_PORT, WEBUI_PORT, API_HOST, API_VERSION,
+  COUCHDB_HOST, COUCHDB_PORT, COUCHDB_MEMOS_COLLECTION, COUCHDB_ADMIN_PREFIX } = process.env;
+
 // @techdebt configure express options:
 //app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 3000);
 //app.set('ipaddr', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
@@ -64,8 +66,8 @@ app.get('/', (req, res) => {
     data: {
       "sf0web-api": `${API_HOST}:${API_PORT}/${API_VERSION}`,
       "sf0web-ui": `${API_HOST}:${WEBUI_PORT}`,
-      "sf0couch-api": `http://0.0.0.0:5984/ported-memos/`,
-      "sf0couch-web-ui": `http://0.0.0.0:5984/_utils/`,
+      "sf0couch-api": `http://${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_MEMOS_COLLECTION}/`,
+      "sf0couch-web-ui": `http://${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_ADMIN_PREFIX}/`,
     }
   });
 })

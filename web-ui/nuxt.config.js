@@ -46,6 +46,7 @@ export default {
     // @techdebt: "TypeError: GoogleFontsHelper is not a constructor"
     // Doc: https://github.com/nuxt-community/google-fonts-module
     //"@nuxtjs/google-fonts",
+    ['@nuxtjs/dotenv', { path: '../' }],
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)

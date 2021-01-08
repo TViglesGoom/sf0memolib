@@ -15,11 +15,13 @@ export const state = () => ({
   // notificationLog: [],
 })
 
+const URL = `${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_VERSION}/memo/couch`
+
 export const actions = {
   async reloadLib({ commit }) {
     try {
       const response = await axios.get(
-        `http://0.0.0.0:3001/v0.0.1/memo/couch/list`
+        `${URL}/list`
       )
       commit(
         'setCollection',
@@ -32,7 +34,7 @@ export const actions = {
   async searchLib({ commit }, regex: string) {
     try {
       const response = await axios.get(
-        `http://0.0.0.0:3001/v0.0.1/memo/couch/search/${regex}`
+        `${URL}/search/${regex}`
       )
       // @techdebt: decide if there's benefit to having search results and full list of memos in store as
       // distinct entries and if both would be needed at the same time. Decided in favour of independent variables,
@@ -47,7 +49,7 @@ export const actions = {
   async openMemoInEditor({ commit }, _id) {
     try {
       const response = await axios.get(
-        `http://0.0.0.0:3001/v0.0.1/memo/couch/${_id}`
+        `${URL}/${_id}`
       )
       commit('setMemoInEditor', response.data.memoDoc)
     } catch (error) {
@@ -63,7 +65,7 @@ export const actions = {
         source: 'mem0lib web-ui',
       }
       const response = await axios.post(
-        `http://0.0.0.0:3001/v0.0.1/memo/couch`,
+        URL,
         blankMemoDocument
       )
       commit('setMemoInEditor', response.data.memoDoc)
@@ -90,7 +92,7 @@ export const actions = {
   async saveMemoInEditor({ commit, dispatch, state }) {
     if (state.memoEditor.couchDoc !== null) {
       const response = await axios.put(
-        `http://0.0.0.0:3001/v0.0.1/memo/couch/${state.memoEditor.couchDoc._id}`,
+        `${URL}/${state.memoEditor.couchDoc._id}`,
         state.memoEditor.couchDoc
       )
       commit('setMemoInEditor', response.data.memoDoc)
@@ -105,7 +107,7 @@ export const actions = {
   async deleteMemo({ state, dispatch }) {
     if (state.memoEditor.couchDoc !== null) {
       const response = await axios.delete(
-        `http://0.0.0.0:3001/v0.0.1/memo/couch/${state.memoEditor.couchDoc._id}/${state.memoEditor.couchDoc._rev}`
+        `${URL}/${state.memoEditor.couchDoc._id}/${state.memoEditor.couchDoc._rev}`
       )
       dispatch('closeMemoInEditor') // close in editor
       await dispatch('reloadLib')
