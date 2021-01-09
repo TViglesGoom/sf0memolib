@@ -1,15 +1,9 @@
 <template>
   <header>
     <div id="web-ui-header">
-      <div id="left-part">
-        <a>
-          <span id="logo">sf0port web-ui</span>
-        </a>
-      </div>
       <div id="right-part">
         <nav>
           <a id="memolib-link">MemoLib ( {{ numOfMemosInCollection }} docs)</a>
-          <a>Taxonomy</a>
         </nav>
 
         <form @submit.prevent="triggerSearch">
