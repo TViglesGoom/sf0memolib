@@ -1,17 +1,21 @@
 <template>
-  <div id="horizon" class="h-screen w-screen">
+  <div id="horizon">
+    <confirm :data="confirmData" :clear-data="setConfirmData" />
     <app-notification-group class="z-0 absolute"></app-notification-group>
 
     <header-component></header-component>
 
-    <div id="web-ui-main" class="grid grid-cols-2 gap-4">
-
-      <div id="web-ui-left-col" class="relative h-full">
-        <memo-editor></memo-editor>
+    <div id="web-ui-main">
+      <div id="web-ui-left-col">
+        <memo-editor
+          :data="confirmData"
+          :set-data="setConfirmData"
+        ></memo-editor>
       </div>
-      <div id="web-ui-right-col" class="relative h-full">
+      <div id="web-ui-right-col">
         <memo-list></memo-list>
       </div>
+      <!--      <div id="web-ui-right-col"></div>-->
     </div>
 
     <footer-component></footer-component>
@@ -19,17 +23,36 @@
 </template>
 
 <style lang="scss" scoped>
+@import url('http://fonts.googleapis.com/css?family=Roboto');
+
 #horizon {
   // @ref: https://www.heropatterns.com/
-  background-color: #e2e5db;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%2392a9ac' fill-opacity='1' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+  position: relative;
+  font-family: Roboto, Arial, serif;
+  display: flex;
+  height: 100vh;
+  flex-flow: column;
+  background-color: #4a4443;
+
   #web-ui-main {
-    height: calc(100vh - 72px);
+    display: inline-flex;
+    flex: auto;
+
     #web-ui-left-col {
-      //border: 1px solid gray;
+      padding: 4px 16px;
+      border-right: solid 1px #fff;
+      color: #fff;
+      flex: 1;
+      height: 100%;
+      background-color: #333;
     }
+
     #web-ui-right-col {
-      //border: 1px solid gray;
+      position: relative;
+      flex: 1;
+      height: 100%;
+      padding: 12px;
+      background-color: #333;
     }
   }
 }
@@ -39,13 +62,37 @@
 import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 
-import NotificationGroup from '@/components/notifications/notification-group.vue';
-import HeaderComponent from '@/components/common/header.vue';
-import FooterComponent from '@/components/common/footer.vue';
-import MemoEditorComponent from '@/components/memo/memo-editor.vue';
-import MemoListComponent from '@/components/memo/memo-list.vue';
-import MemoViewerComponent from '@/components/memo/memo-viewer.vue';
-import TaxonomyManagerComponent from '@/components/taxonomy/taxonomy-manager.vue';
+import NotificationGroup from '@/components/notifications/notification-group.vue'
+import HeaderComponent from '@/components/common/header.vue'
+import FooterComponent from '@/components/common/footer.vue'
+import Confirm from '@/components/common/confirm.vue'
+import MemoEditorComponent from '@/components/memo/memo-editor.vue'
+import MemoListComponent from '@/components/memo/memo-list.vue'
+import MemoViewerComponent from '@/components/memo/memo-viewer.vue'
+import TaxonomyManagerComponent from '@/components/taxonomy/taxonomy-manager.vue'
+
+class Store {
+  state = {
+    isAsking: false,
+    message: '',
+    confirmMethod: () => {},
+    cancelMethod: () => {},
+  }
+
+  setData({
+    isAsking = false,
+    message = '',
+    confirmMethod = () => {},
+    cancelMethod = () => {},
+  } = {}) {
+    this.state.isAsking = isAsking
+    this.state.message = message
+    this.state.confirmMethod = confirmMethod
+    this.state.cancelMethod = cancelMethod
+  }
+}
+
+const store = new Store()
 
 export default Vue.extend({
   components: {
@@ -55,12 +102,20 @@ export default Vue.extend({
     'memo-editor': MemoEditorComponent,
     'memo-viewer': MemoViewerComponent,
     'memo-list': MemoListComponent,
+    confirm: Confirm,
     'taxonomy-manager': TaxonomyManagerComponent,
   },
+  data: () => ({
+    confirmData: store.state,
+    setConfirmData: store.setData.bind(store),
+  }),
   computed: {
     ...mapGetters({
       memosList: 'memos/memosList',
-    })
+    }),
+  },
+  async mounted() {
+    await this.loadMemoLibrary()
   },
   methods: {
     ...mapActions({
@@ -68,9 +123,5 @@ export default Vue.extend({
       editMemo: 'memos/openMemoInEditor',
     }),
   },
-
-  async mounted() {
-    await this.loadMemoLibrary();
-  }
 })
 </script>

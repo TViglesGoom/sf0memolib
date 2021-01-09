@@ -1,10 +1,13 @@
+require('dotenv').config({ path: '../../.env'})
+const URL = `${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_VERSION}`
+
 define({
   "name": "mem0lib /web-api documentation",
-  "version": "0.0.1",
+  "version": process.env.API_VERSION,
   "description": "Documentation for the mem0lib /web-api",
   "title": "Custom apiDoc browser title",
-  "url": "http://0.0.0.0:3001/v0.0.1/doc",
-  "sampleUrl": "http://0.0.0.0:3001/v0.0.1/",
+  "url": `${URL}/doc",
+  "sampleUrl": URL,
   "template": {
     "withCompare": true,
     "withGenerator": true,
