@@ -26,7 +26,7 @@ PROD_SESSION_NAME="memolib-build"
 
 if [ $1 == 'dev' ]
 then
-	echo "statring development mode"
+	echo "starting development mode"
 	./mem0lib db:up
 	tmux has-session -t $DEV_SESSION_NAME 2>/dev/null
 	if [ $? == 0 ]
@@ -39,17 +39,11 @@ then
 	tmux a -t $DEV_SESSION_NAME
 elif [ $1 == 'prod' ]
 then
-	echo "building production version"
-	./mem0lib db:up
-	tmux has-session -t $PROD_SESSION_NAME 2>/dev/null
-	if [ $? == 0 ]
-	then
-		tmux kill-session -t $PROD_SESSION_NAME
-	fi
-	tmux new-session -d -s $PROD_SESSION_NAME
-	tmux neww -n web-api -t $PROD_SESSION_NAME: 'cd ./web-api && npm run build'
-	tmux neww -n web-ui -t $PROD_SESSION_NAME: 'cd ./web-ui && npm run build'
-	tmux a -t $PROD_SESSION_NAME
+	# IMO no point using tmux for building prod since we don't need
+	# multiple shells for that. Also - I would not worry much about `prod`
+	# at this point - there are no tests, no CI/CD and hence
+	# build and deploy automation might be a bit premature.
+	echo "building production version (pending implementation).."
 elif [ $1 == 'db:init' ]
 then
   echo "building CouchDB service"
@@ -72,15 +66,17 @@ then
   docker stop mem0lib-couchdb
 elif [ $1 == 'db:backup' ]
 then
-  echo "@todo: backup data ;env and conf?"
+  echo "@todo: backup data, env and conf?"
   echo "zip up ./databases/couchdb/data && ./databases/couchdb/etc dirs (and logs)"
 elif [ $1 == 'db:restore' ]
 then
-  echo "@todo: restore data ;env and conf"
-  # ..
+  echo "@todo: restore data, env and conf"
 elif [ $1 == 'install' ]
 then
   cp "$BASE_PATH/.env.example" "$BASE_PATH/.env"
+  # @todo web-api npm install
+  # @todo web-ui npm install
+  # @todo optionally set up tmux if not already on system
 elif [ $1 == 'uninstall' ]
 then
   rm -rf .env
