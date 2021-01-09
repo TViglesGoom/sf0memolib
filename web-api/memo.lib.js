@@ -1,10 +1,10 @@
 const MEMOS_ROOT = '../memos/obsidian-vault'; // @todo named export, re-use in migration script and elsewhere
 const IGNORE_GLOBS = ['.obsidian', 'attachments', '*.css'];
-const COUCHDB_HOST = '0.0.0.0';
-const COUCHDB_PORT = '5984';
-const COUCHDB_USER = 'admin';
-const COUCHDB_PWD = 'password';
-const COUCHDB_MEMOS_COLLECTION = 'ported-memos';
+
+import dotenv from 'dotenv'
+dotenv.config({ path: '../.env' })
+
+const { COUCHDB_HOST, COUCHDB_PORT, COUCHDB_USER, COUCHDB_PWD, COUCHDB_MEMOS_COLLECTION } = process.env;
 const COUCHDB_DATABASE_URL = `http://${COUCHDB_USER}:${COUCHDB_PWD}@${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_MEMOS_COLLECTION}`
 
 import util from 'util';
@@ -50,7 +50,7 @@ export const MemoLib = {
   listMemoCouchDocs: async () => {
     try {
       const response = await axios.get(`${COUCHDB_DATABASE_URL}/_all_docs?include_docs=true`)
-      return response['data']['rows']?.length ? response['data']['rows'] : [];
+      return response['data']['rows'].length ? response['data']['rows'] : [];
     } catch (error) {
       console.error({error})
     }
@@ -66,7 +66,7 @@ export const MemoLib = {
           ]
         }
       });
-      return response['data']['docs']?.length ? response['data']['docs'] : [];
+      return response['data']['docs'].length ? response['data']['docs'] : [];
     } catch (error) {
       console.error({error})
     }

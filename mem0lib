@@ -21,14 +21,42 @@ WHITE='\033[1;37m'
 # echo -e "I ${RED}love${NC} Stack Overflow"
 
 BASE_PATH=$(pwd)
+DEV_SESSION_NAME="memolib-dev"
+PROD_SESSION_NAME="memolib-build"
 
-if [ $1 == 'db:init' ]
+if [ $1 == 'dev' ]
+then
+	echo "statring development mode"
+	./mem0lib db:up
+	tmux has-session -t $DEV_SESSION_NAME 2>/dev/null
+	if [ $? == 0 ]
+	then
+		tmux kill-session -t $DEV_SESSION_NAME
+	fi
+	tmux new-session -d -s $DEV_SESSION_NAME
+	tmux neww -n web-api -t $DEV_SESSION_NAME: 'cd ./web-api && npm run dev'
+	tmux neww -n web-ui -t $DEV_SESSION_NAME: 'cd ./web-ui && npm run dev'
+	tmux a -t $DEV_SESSION_NAME
+elif [ $1 == 'prod' ]
+then
+	echo "building production version"
+	./mem0lib db:up
+	tmux has-session -t $PROD_SESSION_NAME 2>/dev/null
+	if [ $? == 0 ]
+	then
+		tmux kill-session -t $PROD_SESSION_NAME
+	fi
+	tmux new-session -d -s $PROD_SESSION_NAME
+	tmux neww -n web-api -t $PROD_SESSION_NAME: 'cd ./web-api && npm run build'
+	tmux neww -n web-ui -t $PROD_SESSION_NAME: 'cd ./web-ui && npm run build'
+	tmux a -t $PROD_SESSION_NAME
+elif [ $1 == 'db:init' ]
 then
   echo "building CouchDB service"
-  docker build -t sf0/dpuddle-couchdb ./databases/couchdb
+  docker build -t sf0/mem0lib/couchdb ./databases/couchdb
 
   docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password \
-  -p 5984:5984 -d --name datapuddle-couchdb \
+  -p 5984:5984 -d --name mem0lib-couchdb \
   -v $(pwd)/databases/couchdb/data:/opt/couchdb/data \
   -v $(pwd)/databases/couchdb/etc:/opt/couchdb/etc/local.d \
   -v $(pwd)/databases/couchdb/log:/opt/couchdb/log \
@@ -36,12 +64,12 @@ then
 elif [ $1 == 'db:up' ]
 then
   echo "(re-)starting CouchDB service"
-  docker start datapuddle-couchdb
+  docker start mem0lib-couchdb
   docker ps -a
 elif [ $1 == 'db:down' ]
 then
   echo "stopping CouchDB service"
-  docker stop datapuddle-couchdb
+  docker stop mem0lib-couchdb
 elif [ $1 == 'db:backup' ]
 then
   echo "@todo: backup data ;env and conf?"
@@ -52,7 +80,7 @@ then
   # ..
 elif [ $1 == 'install' ]
 then
-  # cp "$BASE_PATH/.env.example" "$BASE_PATH/.env"
+  cp "$BASE_PATH/.env.example" "$BASE_PATH/.env"
 elif [ $1 == 'uninstall' ]
 then
   rm -rf .env
