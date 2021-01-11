@@ -92,9 +92,14 @@ Available sub-commands:\n
   ${LIGHT_CYAN}install${NC}\n
   \t Install pre-requisites\n
   ${LIGHT_CYAN}uninstall${NC}\n
-  \t Uninstall pre-requisites n\n
+  \t Uninstall pre-requisites\n
   ${LIGHT_CYAN}--help${NC}\n
   \t Display help message\n
+  \n
+  ${ORANGE}Tmux development mode${NC}\n
+  \n
+  ${LIGHT_CYAN}dev${NC}\n
+  \t Start tmux session with CouchDB docker container and server, client dev scripts in it\n
   \n
   ${ORANGE}CouchDB service${NC}\n
   \n
@@ -104,7 +109,7 @@ Available sub-commands:\n
   ${LIGHT_CYAN}db:up${NC}\n
   \t Start CouchDB service\n
   ${LIGHT_CYAN}db:down${NC}\n
-  \t Stop CouchDB service n\n
+  \t Stop CouchDB service \n
 "
   echo -e $__help_message
 else
