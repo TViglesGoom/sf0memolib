@@ -4,9 +4,10 @@ const IGNORE_GLOBS = ['.obsidian', 'attachments', '*.css'];
 import dotenv from 'dotenv'
 dotenv.config({ path: '../.env' })
 
-const { defaultCollection } = require('../app.config')
+import conf from '../app.config.js'
+const { defaultCollection } = conf
 const { COUCHDB_HOST, COUCHDB_PORT } = process.env
-const COUCHDB_DATABASE_URL = `http://${COUCHDB_HOST}:${COUCHDB_PORT}/${defaultCollection}`
+const COUCHDB_DATABASE_URL = `${COUCHDB_HOST}:${COUCHDB_PORT}/${defaultCollection}`
 
 import util from 'util';
 import { exec } from 'child_process';

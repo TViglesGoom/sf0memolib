@@ -23,7 +23,10 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '../.env' })
 
 const { API_PORT, WEBUI_PORT, API_HOST, API_VERSION,
-  COUCHDB_HOST, COUCHDB_PORT, COUCHDB_MEMOS_COLLECTION, COUCHDB_ADMIN_PREFIX } = process.env;
+  COUCHDB_HOST, COUCHDB_PORT, COUCHDB_ADMIN_PREFIX } = process.env;
+
+import conf from "../app.config.js"
+const { defaultCollection } = conf
 
 // @techdebt configure express options:
 //app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 3000);
@@ -66,8 +69,8 @@ app.get('/', (req, res) => {
     data: {
       "sf0web-api": `${API_HOST}:${API_PORT}/${API_VERSION}`,
       "sf0web-ui": `${API_HOST}:${WEBUI_PORT}`,
-      "sf0couch-api": `http://${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_MEMOS_COLLECTION}/`,
-      "sf0couch-web-ui": `http://${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_ADMIN_PREFIX}/`,
+      "sf0couch-api": `${COUCHDB_HOST}:${COUCHDB_PORT}/${defaultCollection}/`,
+      "sf0couch-web-ui": `${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_ADMIN_PREFIX}/`,
     }
   });
 })

@@ -36,12 +36,15 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import conf from '../../../app.config.js'
+const { defaultCollection } = conf
+
 export default Vue.extend({
   data: () => {
     return {
       WebAPI_URL: `${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_VERSION}/`,
-      CouchAdminUI_URL: `http://${process.env.COUCHDB_HOST}:${process.env.COUCHDB_PORT}/${process.env.COUCHDB_ADMIN_PREFIX}/`,
-      CouchDB_API_URL: `http://${process.env.COUCHDB_HOST}:${process.env.COUCHDB_PORT}/${process.env.COUCHDB_MEMOS_COLLECTION}/`,
+      CouchAdminUI_URL: `${process.env.COUCHDB_HOST}:${process.env.COUCHDB_PORT}/${process.env.COUCHDB_ADMIN_PREFIX}/`,
+      CouchDB_API_URL: `${process.env.COUCHDB_HOST}:${process.env.COUCHDB_PORT}/${defaultCollection}/`,
     }
   },
 })
