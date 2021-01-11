@@ -27,16 +27,16 @@ PROD_SESSION_NAME="memolib-build"
 if [ $1 == 'dev' ]
 then
 	echo "starting development mode"
-	./mem0lib db:up
 	tmux has-session -t $DEV_SESSION_NAME 2>/dev/null
 	if [ $? == 0 ]
 	then
 		tmux kill-session -t $DEV_SESSION_NAME
 	fi
 	tmux new-session -d -s $DEV_SESSION_NAME
+	tmux neww -n db-docker -t $DEV_SESSION_NAME: './mem0lib db:up'
 	tmux neww -n web-api -t $DEV_SESSION_NAME: 'cd ./web-api && npm run dev'
-	tmux neww -n web-ui -t $DEV_SESSION_NAME: 'cd ./web-ui && npm run dev'
-	tmux a -t $DEV_SESSION_NAME
+	tmux neww -n web-ui -t $DEV_SESSION_NAME: 'cd ./web-ui && npm run dev && tmux capture-pane -b temp-capture-buffer -S -'
+	tmux a -t $DEV_SESSION_NAME\; source-file ./tmux.conf
 elif [ $1 == 'prod' ]
 then
 	# IMO no point using tmux for building prod since we don't need
