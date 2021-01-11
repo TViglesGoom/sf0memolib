@@ -97,18 +97,6 @@ See `./mem0lib --help` for details.
 
 As an example of your .env file, you can use [.env.example](.env.example) file.
 
-#### Environment variables description
-- `API_HOST` Public web API address. Defaults to https://0.0.0.0 ~~Should match the pattern "<CONNECTION_METHOD>://<SERVER_IP_ADDRESS>"~~ 
-- `API_PORT` Public web API port. 
-- `API_VERSION` Public web API version.
-- `COUCHDB_HOST` CouchDB host. Defaults to https://0.0.0.0
-- `COUCHDB_PORT` CouchDB port. Common convention is to use `5984`
-- `COUCHDB_MEMOS_COLLECTION` CouchDB collection name
-- `COUCHDB_ADMIN_PREFIX` path to couchdb admin (ui) page
-- `COUCHDB_USER` CouchDB user
-- `COUCHDB_PWD` CouchDB password
-- `WEBUI_PORT` Public web UI port
-
 ### self-hosting
 
 @todo @document
