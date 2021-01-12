@@ -9,6 +9,7 @@ export const state = () => ({
     term: '',
     // results: [],
   },
+  activeTaxonomies: [],
   memoEditor: {
     couchDoc: null,
   },
@@ -30,6 +31,7 @@ export const actions = {
     }
   },
   async searchLib({ commit }, regex) {
+    commit('setSearchTerm', regex)
     try {
       const response = await axios.get(`${URL}/search/${regex}`)
       // @techdebt: decide if there's benefit to having search results and full list of memos in store as
@@ -42,10 +44,10 @@ export const actions = {
       console.error('error', e)
     }
   },
-  async advancedSearchLib({ commit }, { regex, filterBy }) {
+  async advancedSearchLib({ commit, state }) {
     try {
       const response = await axios.get(`${URL}/advancedSearch`, {
-        params: { regex, filterBy },
+        params: { regex: state.search.term, filterBy: state.activeTaxonomies },
       })
       commit('setCollection', response.data.searchResults)
     } catch (e) {
@@ -150,6 +152,10 @@ export const actions = {
       5 * 1000
     )
   },
+  toggleTaxonomy({ commit, state }, tag: string) {
+    console.log(state.activeTaxonomies)
+    commit('toggleActiveTaxonomies', tag)
+  },
 }
 
 export const mutations = {
@@ -187,6 +193,20 @@ export const mutations = {
   },
   setMemoEditorTaxonomy(state, newTaxonomy: string[]) {
     state.memoEditor.couchDoc.taxonomy = newTaxonomy
+  },
+  toggleActiveTaxonomies(state, taxonomy) {
+    console.log(2, state.activeTaxonomies)
+    const { activeTaxonomies } = state
+    const index = state.activeTaxonomies.indexOf(taxonomy)
+    if (index === -1) {
+      state.activeTaxonomies = [...activeTaxonomies, taxonomy]
+    } else {
+      state.activeTaxonomies = [
+        ...activeTaxonomies.slice(0, index),
+        ...activeTaxonomies.slice(index + 1),
+      ]
+    }
+    console.log(3, state.activeTaxonomies)
   },
 }
 
@@ -247,5 +267,15 @@ export const getters = {
   },
   editorDocumentTaxonomy(state) {
     return state.memoEditor.couchDoc.taxonomy || []
+  },
+  taxonomyList(state) {
+    const tags = new Set()
+    state.collection.forEach((memo) =>
+      memo.taxonomy.forEach((tag) => tags.add(tag))
+    )
+    return Array.from(tags).sort()
+  },
+  activeTaxonomyList(state) {
+    return state.activeTaxonomies
   },
 }

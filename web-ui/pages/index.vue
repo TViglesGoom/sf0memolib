@@ -16,6 +16,9 @@
         <memo-list></memo-list>
       </div>
       <!--      <div id="web-ui-right-col"></div>-->
+      <div id="memo-filter">
+        <memo-filter />
+      </div>
     </div>
 
     <footer-component></footer-component>
@@ -70,6 +73,7 @@ import MemoEditorComponent from '@/components/memo/memo-editor.vue'
 import MemoListComponent from '@/components/memo/memo-list.vue'
 import MemoViewerComponent from '@/components/memo/memo-viewer.vue'
 import TaxonomyManagerComponent from '@/components/taxonomy/taxonomy-manager.vue'
+import MemoFilter from '@/components/memo/memo-filter.vue'
 
 class Store {
   state = {
@@ -104,6 +108,7 @@ export default Vue.extend({
     'memo-list': MemoListComponent,
     confirm: Confirm,
     'taxonomy-manager': TaxonomyManagerComponent,
+    'memo-filter': MemoFilter,
   },
   data: () => ({
     confirmData: store.state,

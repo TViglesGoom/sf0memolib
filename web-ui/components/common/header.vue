@@ -77,7 +77,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { advancedSearch } from '../../../app.config.js'
 
 export default Vue.extend({
@@ -85,7 +85,6 @@ export default Vue.extend({
     return {
       searchTerm: '',
       advancedSearch,
-      filterTags: [],
     }
   },
   computed: {
@@ -103,10 +102,7 @@ export default Vue.extend({
     async triggerSearch() {
       console.log(this.advancedSearch)
       if (this.advancedSearch) {
-        await this.advancedSearchMemoLibrary({
-          regex: this.searchTerm,
-          filterBy: this.filterTags,
-        })
+        await this.advancedSearchMemoLibrary(this.searchTerm)
       } else {
         if (this.searchTerm.length > 1) {
           // @todo min number of characters to search
