@@ -7,7 +7,7 @@
         </nav>
       </div>
       <div id="right-part">
-        <form @submit.prevent="triggerSearch">
+        <form @input.prevent="triggerSearch" @submit.prevent="triggerSearch">
           <div>
             <span>
               <button @click="triggerSearch"></button>
@@ -21,6 +21,12 @@
             />
           </div>
         </form>
+        <input
+          id="adv-search"
+          v-model="advancedSearch"
+          type="checkbox"
+          @change="triggerSearch"
+        />
       </div>
     </div>
   </header>
@@ -60,6 +66,11 @@
           0 0 0.8em rgba(255, 255, 255, 0.3);
       }
     }
+    #adv-search {
+      margin-left: 10px;
+      width: 25px;
+      height: 25px;
+    }
   }
 }
 </style>
@@ -67,11 +78,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import {mapActions, mapGetters} from 'vuex'
+import { advancedSearch } from '../../../app.config.js'
 
 export default Vue.extend({
   data: () => {
     return {
       searchTerm: '',
+      advancedSearch,
+      filterTags: [],
     }
   },
   computed: {
@@ -84,13 +98,22 @@ export default Vue.extend({
     ...mapActions({
       loadMemoLibrary: 'memos/reloadLib',
       searchMemoLibrary: 'memos/searchLib',
+      advancedSearchMemoLibrary: 'memos/advancedSearchLib',
     }),
     async triggerSearch() {
-      if (this.searchTerm.length > 1) {
-        // @todo min number of characters to search
-        await this.searchMemoLibrary(this.searchTerm)
+      console.log(this.advancedSearch)
+      if (this.advancedSearch) {
+        await this.advancedSearchMemoLibrary({
+          regex: this.searchTerm,
+          filterBy: this.filterTags,
+        })
       } else {
-        await this.loadMemoLibrary()
+        if (this.searchTerm.length > 1) {
+          // @todo min number of characters to search
+          await this.searchMemoLibrary(this.searchTerm)
+        } else {
+          await this.loadMemoLibrary()
+        }
       }
     },
   },

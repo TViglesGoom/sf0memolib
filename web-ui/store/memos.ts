@@ -20,9 +20,7 @@ const URL = `${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_V
 export const actions = {
   async reloadLib({ commit }) {
     try {
-      const response = await axios.get(
-        `${URL}/list`
-      )
+      const response = await axios.get(`${URL}/list`)
       commit(
         'setCollection',
         response.data.memos.map((obj) => obj.doc)
@@ -31,11 +29,9 @@ export const actions = {
       console.error('error', e)
     }
   },
-  async searchLib({ commit }, regex: string) {
+  async searchLib({ commit }, regex) {
     try {
-      const response = await axios.get(
-        `${URL}/search/${regex}`
-      )
+      const response = await axios.get(`${URL}/search/${regex}`)
       // @techdebt: decide if there's benefit to having search results and full list of memos in store as
       // distinct entries and if both would be needed at the same time. Decided in favour of independent variables,
       // if nothing else then to at least display info like "matched X / total_X docs"
@@ -46,11 +42,19 @@ export const actions = {
       console.error('error', e)
     }
   },
+  async advancedSearchLib({ commit }, { regex, filterBy }) {
+    try {
+      const response = await axios.get(`${URL}/advancedSearch`, {
+        params: { regex, filterBy },
+      })
+      commit('setCollection', response.data.searchResults)
+    } catch (e) {
+      console.error('error', e)
+    }
+  },
   async openMemoInEditor({ commit }, _id) {
     try {
-      const response = await axios.get(
-        `${URL}/${_id}`
-      )
+      const response = await axios.get(`${URL}/${_id}`)
       commit('setMemoInEditor', response.data.memoDoc)
     } catch (error) {
       console.error({ error })
@@ -64,10 +68,7 @@ export const actions = {
         taxonomy: [],
         source: 'mem0lib web-ui',
       }
-      const response = await axios.post(
-        URL,
-        blankMemoDocument
-      )
+      const response = await axios.post(URL, blankMemoDocument)
       commit('setMemoInEditor', response.data.memoDoc)
       await dispatch('reloadLib')
       dispatch(

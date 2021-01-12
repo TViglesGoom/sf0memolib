@@ -128,6 +128,29 @@ app.get(`/${API_VERSION}/memo/couch/search/:regex`, async (req, res) => {
 });
 
 /**
+ * @api {get} memo/couch/search/<regexp> Search memos in CouchDB collection by keyword
+ * @apiName web-api
+ * @apiVersion 0.0.1
+ * @apiGroup mem0lib
+ *
+ * @apiSuccess {JSON} Collection of matched CouchDB documents and info about original search.
+ * Invokes CouchDB `/_find` with query:
+ * `"selector": { _id: { $gt: null }, $or: [{ content: { $elemMatch: { $regex: regex } } }, { title: { $regex: regex } }]`
+ */
+app.get(`/${API_VERSION}/memo/couch/advancedSearch`, async (req, res) => {
+  const regex = req.query.regex.split('').join('.*')
+  const filterBy = req.query.filterBy
+  const searchResults = (await MemoLib.searchMemoCouchDocs(regex))
+    .filter(memo => filterBy.every(tag => memo.taxonomy.indexOf(tag) !== -1))
+  res.json({
+    status: "ok",
+    searchTerm: req.params['regex'],
+    searchResults,
+  });
+});
+
+
+/**
  * @api {get} memo/couch/<id> Get memo document by ID
  * @apiName web-api
  * @apiVersion 0.0.1
