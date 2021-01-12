@@ -1,9 +1,9 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
-	components: {
+  components: {
     editor: require('vue2-ace-editor'),
   },
   computed: {
@@ -12,38 +12,44 @@ export default Vue.extend({
     }),
     editorContent: {
       get() {
-        return this.couchDocContent || '';
+        return this.couchDocContent || ''
       },
       set(content: String) {
         // console.log(`updating couchDoc, length: ${content.length}`);
-        this.$store.dispatch('memos/updateEditedMemoContent', content.split('\n'));
+        this.$store.dispatch(
+          'memos/updateEditedMemoContent',
+          content.split('\n')
+        )
+        console.log(this.$store.getters['memos/editorDocumentChanged'])
       },
-    }
+    },
   },
   methods: {
-    //...mapActions({
+    // ...mapActions({
     //  updateDocContent: 'memos/updateMemoDocumentContent',
-    //}),
-    editorInit: function () {
-      require('brace/ext/language_tools'); //language extension prerequsite
-      require('brace/mode/html');
-      require('brace/theme/chrome');
-      require('brace/mode/markdown');
-      //require('brace/snippets/javascript') //snippet
-      //require('brace/mode/javascript')    //language
-      //require('brace/mode/less')
-    }
+    // }),
+    editorInit() {
+      require('brace/ext/language_tools') // language extension prerequsite
+      require('brace/mode/html')
+      require('brace/theme/chrome')
+      require('brace/mode/markdown')
+      // require('brace/snippets/javascript') //snippet
+      // require('brace/mode/javascript')    //language
+      // require('brace/mode/less')
+    },
   },
 })
 </script>
 
 <template>
-  <editor v-model="editorContent"
-    @init="editorInit"
-    lang="markdown" theme="chrome"
-     height="200px"
+  <editor
+    v-model="editorContent"
+    theme="chrome"
+    lang="markdown"
+    height="200px"
     class="ace-editor-instance"
-  ></editor>
+    @init="editorInit"
+  />
 </template>
 
 <style lang="scss">
