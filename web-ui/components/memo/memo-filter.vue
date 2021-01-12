@@ -1,6 +1,6 @@
 <template>
-  <ul>
-    <li v-for="tag in taxonomyList">
+  <ul v-if="isAdvancedSearch">
+    <li v-for="tag in taxonomyList" :key="tag">
       <label :for="tag">
         {{ tag }}
         <input
@@ -23,6 +23,7 @@ export default Vue.extend({
     ...mapGetters({
       taxonomyList: 'memos/taxonomyList',
       activeTaxonomyList: 'memos/activeTaxonomyList',
+      isAdvancedSearch: 'memos/isAdvancedSearch',
     }),
   },
   methods: {
