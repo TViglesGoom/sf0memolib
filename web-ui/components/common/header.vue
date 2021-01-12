@@ -78,13 +78,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
-import { advancedSearch } from '../../../app.config.js'
 
 export default Vue.extend({
   data: () => {
     return {
       searchTerm: '',
-      advancedSearch,
     }
   },
   computed: {
@@ -92,6 +90,15 @@ export default Vue.extend({
       numOfMemosInCollection: 'memos/memosListLength',
       // numOfSearchResults: 'memos/memosSearchResultsLength',
     }),
+    advancedSearch: {
+      get() {
+        const { isAdvancedSearch } = mapGetters({ isAdvancedSearch: 'memos/isAdvancedSearch' })
+        return isAdvancedSearch
+      },
+      set(value) {
+        this.$store.commit('memos/setAdvancedSearch', value)
+      },
+    },
   },
   methods: {
     ...mapActions({
@@ -100,7 +107,6 @@ export default Vue.extend({
       advancedSearchMemoLibrary: 'memos/advancedSearchLib',
     }),
     async triggerSearch() {
-      console.log(this.advancedSearch)
       if (this.advancedSearch) {
         await this.advancedSearchMemoLibrary(this.searchTerm)
       } else {

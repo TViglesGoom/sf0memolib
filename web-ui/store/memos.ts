@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Vue from 'vue'
+import conf from '../../app.config.js'
 
 export const state = () => ({
   loaded: false,
@@ -8,6 +9,7 @@ export const state = () => ({
   search: {
     term: '',
     // results: [],
+    advancedSearch: conf.advancedSearch,
   },
   activeTaxonomies: [],
   memoEditor: {
@@ -153,8 +155,13 @@ export const actions = {
     )
   },
   toggleTaxonomy({ commit, state }, tag: string) {
-    console.log(state.activeTaxonomies)
     commit('toggleActiveTaxonomies', tag)
+  },
+  advancedSearch({ commit }, value: boolean) {
+    commit('setAdvancedSearch', value)
+  },
+  setAdvancedSearch({ commit }, value: boolean) {
+    commit('setAdvancedSearch', value)
   },
 }
 
@@ -195,7 +202,6 @@ export const mutations = {
     state.memoEditor.couchDoc.taxonomy = newTaxonomy
   },
   toggleActiveTaxonomies(state, taxonomy) {
-    console.log(2, state.activeTaxonomies)
     const { activeTaxonomies } = state
     const index = state.activeTaxonomies.indexOf(taxonomy)
     if (index === -1) {
@@ -206,7 +212,9 @@ export const mutations = {
         ...activeTaxonomies.slice(index + 1),
       ]
     }
-    console.log(3, state.activeTaxonomies)
+  },
+  setAdvancedSearch(state, value: boolean) {
+    state.search.advancedSearch = value
   },
 }
 
@@ -277,5 +285,8 @@ export const getters = {
   },
   activeTaxonomyList(state) {
     return state.activeTaxonomies
+  },
+  isAdvancedSearch(state) {
+    return state.search.advancedSearch
   },
 }
