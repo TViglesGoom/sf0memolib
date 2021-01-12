@@ -16,7 +16,7 @@
         <memo-list></memo-list>
       </div>
       <!--      <div id="web-ui-right-col"></div>-->
-      <div id="memo-filter">
+      <div v-if="isAdvancedSearch" id="memo-filter">
         <memo-filter />
       </div>
     </div>
@@ -35,27 +35,29 @@
   display: flex;
   height: 100vh;
   flex-flow: column;
-  background-color: #4a4443;
+  background-color: #333;
 
   #web-ui-main {
     display: inline-flex;
     flex: auto;
 
     #web-ui-left-col {
+      flex: 2;
       padding: 4px 16px;
       border-right: solid 1px #fff;
       color: #fff;
-      flex: 1;
       height: 100%;
-      background-color: #333;
     }
 
     #web-ui-right-col {
       position: relative;
-      flex: 1;
+      flex: 2;
       height: 100%;
       padding: 12px;
-      background-color: #333;
+    }
+    #memo-filter {
+      flex: 1;
+      border-left: solid 1px white;
     }
   }
 }
@@ -117,6 +119,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters({
       memosList: 'memos/memosList',
+      isAdvancedSearch: 'memos/isAdvancedSearch',
     }),
   },
   async mounted() {

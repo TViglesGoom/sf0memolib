@@ -89,6 +89,7 @@ export default Vue.extend({
     ...mapGetters({
       numOfMemosInCollection: 'memos/memosListLength',
       // numOfSearchResults: 'memos/memosSearchResultsLength',
+      isAdvancedSearch: 'memos/isAdvancedSearch',
     }),
     advancedSearch: {
       get() {
@@ -96,6 +97,7 @@ export default Vue.extend({
         return isAdvancedSearch
       },
       set(value) {
+        // const { setAdvancedSearch } = mapActions({ setAdvancedSearch: 'memos/setAdvancedSearch' })
         this.$store.commit('memos/setAdvancedSearch', value)
       },
     },
@@ -107,8 +109,9 @@ export default Vue.extend({
       advancedSearchMemoLibrary: 'memos/advancedSearchLib',
     }),
     async triggerSearch() {
-      if (this.advancedSearch) {
-        await this.advancedSearchMemoLibrary(this.searchTerm)
+      this.$store.commit('memos/setSearchTerm', this.searchTerm)
+      if (this.isAdvancedSearch) {
+        await this.advancedSearchMemoLibrary()
       } else {
         if (this.searchTerm.length > 1) {
           // @todo min number of characters to search
