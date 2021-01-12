@@ -140,8 +140,10 @@ app.get(`/${API_VERSION}/memo/couch/search/:regex`, async (req, res) => {
 app.get(`/${API_VERSION}/memo/couch/advancedSearch`, async (req, res) => {
   const regex = req.query.regex.split('').join('.*')
   const filterBy = req.query.filterBy
-  const searchResults = (await MemoLib.searchMemoCouchDocs(regex))
-    .filter(memo => filterBy.every(tag => memo.taxonomy.indexOf(tag) !== -1))
+  let searchResults = await MemoLib.searchMemoCouchDocs(regex)
+  if (filterBy) {
+    searchResults = searchResults.filter(memo => filterBy.every(tag => memo.taxonomy.indexOf(tag) !== -1))
+  }
   res.json({
     status: "ok",
     searchTerm: req.params['regex'],
