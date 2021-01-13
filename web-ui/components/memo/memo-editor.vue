@@ -291,9 +291,13 @@ export default Vue.extend({
       position: relative;
       text-align: center;
       margin: 30px 60px;
+      padding: 0;
       cursor: pointer;
       #upload-label {
+        padding: 14px;
+        position: relative;
         cursor: pointer;
+        display: block;
       }
       #upload-svg {
         position: absolute;
