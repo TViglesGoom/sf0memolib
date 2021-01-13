@@ -35,22 +35,18 @@
 
 <script>
 import Vue from 'vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default Vue.extend({
-  props: {
-    data: {
-      type: Object,
-      default: () => ({
-        isAsking: false,
-        message: '',
-        confirmMethod: () => {},
-        cancelMethod: () => {},
-      }),
-    },
-    clearData: {
-      type: Function,
-      default: () => {},
-    },
+  computed: {
+    ...mapGetters({
+      data: 'memos/confirmModalState',
+    }),
+  },
+  methods: {
+    ...mapActions({
+      clearData: 'memos/setConfirmModalState',
+    }),
   },
 })
 </script>

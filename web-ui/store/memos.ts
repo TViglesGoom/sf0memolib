@@ -16,6 +16,12 @@ export const state = () => ({
     editorLoadedWithDocument: true,
     couchDoc: null,
   },
+  confirmModal: {
+    isAsking: false,
+    message: '',
+    confirmMethod: () => {},
+    cancelMethod: () => {},
+  },
   // notificationLog: [],
 })
 
@@ -157,7 +163,7 @@ export const actions = {
       5 * 1000
     )
   },
-  toggleTaxonomy({ commit, state }, tag: string) {
+  toggleTaxonomy({ commit }, tag: string) {
     commit('toggleActiveTaxonomies', tag)
   },
   advancedSearch({ commit }, value: boolean) {
@@ -165,6 +171,9 @@ export const actions = {
   },
   setAdvancedSearch({ commit }, value: boolean) {
     commit('setAdvancedSearch', value)
+  },
+  setConfirmModalState({ commit }, newState = {}) {
+    commit('setConfirmModalState', newState)
   },
 }
 
@@ -223,6 +232,18 @@ export const mutations = {
   setEditorLoadedWithDocument(state, value: boolean) {
     state.memoEditor.editorLoadedWithDocument = value
   },
+  setConfirmModalState(state, newState) {
+    const defaultState = {
+      isAsking: false,
+      message: '',
+      confirmMethod: () => {},
+      cancelMethod: () => {},
+    }
+    state.confirmModal = {
+      ...defaultState,
+      ...newState,
+    }
+  },
 }
 
 export const getters = {
@@ -268,9 +289,6 @@ export const getters = {
       taxonomy: state.memoEditor.couchDoc.taxonomy,
     })
     // Are there changes to content, title or taxonomy?
-    console.log(currentDocumentSerializedContent)
-    console.log(originalDocumentSerializedContent)
-    console.log(currentDocumentSerializedContent === originalDocumentSerializedContent)
     return (
       currentDocumentSerializedContent !== originalDocumentSerializedContent
     )
@@ -299,5 +317,8 @@ export const getters = {
   },
   editorLoadedWithDocument(state) {
     return state.memoEditor.editorLoadedWithDocument
+  },
+  confirmModalState(state) {
+    return state.confirmModal
   },
 }

@@ -1,19 +1,16 @@
 <template>
   <div id="horizon">
-    <confirm :data="confirmData" :clear-data="setConfirmData" />
+    <confirm />
     <app-notification-group class="z-0 absolute"></app-notification-group>
 
     <header-component></header-component>
 
     <div id="web-ui-main">
       <div id="web-ui-left-col">
-        <memo-editor
-          :data="confirmData"
-          :set-data="setConfirmData"
-        ></memo-editor>
+        <memo-editor />
       </div>
       <div id="web-ui-right-col">
-        <memo-list></memo-list>
+        <memo-list />
       </div>
       <!--      <div id="web-ui-right-col"></div>-->
       <div v-if="isAdvancedSearch" id="memo-filter">
@@ -77,29 +74,6 @@ import MemoViewerComponent from '@/components/memo/memo-viewer.vue'
 import TaxonomyManagerComponent from '@/components/taxonomy/taxonomy-manager.vue'
 import MemoFilter from '@/components/memo/memo-filter.vue'
 
-class Store {
-  state = {
-    isAsking: false,
-    message: '',
-    confirmMethod: () => {},
-    cancelMethod: () => {},
-  }
-
-  setData({
-    isAsking = false,
-    message = '',
-    confirmMethod = () => {},
-    cancelMethod = () => {},
-  } = {}) {
-    this.state.isAsking = isAsking
-    this.state.message = message
-    this.state.confirmMethod = confirmMethod
-    this.state.cancelMethod = cancelMethod
-  }
-}
-
-const store = new Store()
-
 export default Vue.extend({
   components: {
     'app-notification-group': NotificationGroup,
@@ -112,14 +86,11 @@ export default Vue.extend({
     'taxonomy-manager': TaxonomyManagerComponent,
     'memo-filter': MemoFilter,
   },
-  data: () => ({
-    confirmData: store.state,
-    setConfirmData: store.setData.bind(store),
-  }),
   computed: {
     ...mapGetters({
       memosList: 'memos/memosList',
       isAdvancedSearch: 'memos/isAdvancedSearch',
+      state: 'memos/confirmModalState',
     }),
   },
   async mounted() {
@@ -129,6 +100,7 @@ export default Vue.extend({
     ...mapActions({
       loadMemoLibrary: 'memos/reloadLib',
       editMemo: 'memos/openMemoInEditor',
+      setData: 'memos/setConfirmModalState'
     }),
   },
 })
