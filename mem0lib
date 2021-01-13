@@ -54,7 +54,7 @@ then
   -v $(pwd)/databases/couchdb/data:/opt/couchdb/data \
   -v $(pwd)/databases/couchdb/etc:/opt/couchdb/etc/local.d \
   -v $(pwd)/databases/couchdb/log:/opt/couchdb/log \
-  sf0/dpuddle-couchdb
+  sf0/mem0lib/couchdb
 elif [ $1 == 'db:up' ]
 then
   echo "(re-)starting CouchDB service"
