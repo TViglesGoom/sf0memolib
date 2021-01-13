@@ -276,6 +276,7 @@ export default Vue.extend({
 
   #taxonomy-upload-image {
     margin-bottom: 30px;
+    text-align: center;
     #taxonomy-p {
       margin-top: 50px;
     }
@@ -297,6 +298,9 @@ export default Vue.extend({
     }
     #img-container {
       padding: 0 15px;
+      #user-input-img[src=""] {
+        display: none;
+      }
     }
   }
 }
