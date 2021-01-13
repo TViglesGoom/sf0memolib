@@ -102,6 +102,9 @@ export const actions = {
   updateEditedMemoTaxonomy({ commit }, latestValue) {
     commit('setMemoEditorTaxonomy', latestValue)
   },
+  updateEditedMemoImg({ commit }, latestValue) {
+    commit('setMemoEditorImg', latestValue)
+  },
   // @todo: file uploads
   async saveMemoInEditor({ commit, dispatch, state }) {
     if (state.memoEditor.couchDoc !== null) {
@@ -214,6 +217,9 @@ export const mutations = {
   setMemoEditorTaxonomy(state, newTaxonomy: string[]) {
     state.memoEditor.couchDoc.taxonomy = newTaxonomy
   },
+  setMemoEditorImg(state, newImg: string) {
+    state.memoEditor.couchDoc.img = newImg
+  },
   toggleActiveTaxonomies(state, taxonomy) {
     const index = state.activeTaxonomies.indexOf(taxonomy)
     if (index === -1) {
@@ -297,6 +303,9 @@ export const getters = {
   },
   editorDocumentTaxonomy(state) {
     return state.memoEditor.couchDoc.taxonomy || []
+  },
+  editorDocumentImg(state) {
+    return state.memoEditor.couchDoc.img || ''
   },
   taxonomyList(state) {
     const tags = new Set()

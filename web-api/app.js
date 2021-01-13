@@ -10,7 +10,7 @@ const app = express();
 
 app.use(cors());
 app.use(errorHandler({ dumpExceptions: true, showStack: true }));
-app.use(express.json());
+app.use(express.json({ limit: '12mb' }));
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'application/json');

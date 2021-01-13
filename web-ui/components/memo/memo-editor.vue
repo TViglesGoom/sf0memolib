@@ -23,6 +23,7 @@ export default Vue.extend({
       editorDocumentChanged: 'memos/editorDocumentChanged',
       docTitle: 'memos/editorDocumentTitle',
       docTaxonomy: 'memos/editorDocumentTaxonomy',
+      docImg: 'memos/editorDocumentImg'
     }),
     memoTitle: {
       get() {
@@ -53,19 +54,29 @@ export default Vue.extend({
     ...mapActions({
       newEditorMemo: 'memos/openNewInEditor',
       saveEditorMemo: 'memos/saveMemoInEditor',
-      closeEditorMemo: 'memos/closeMemoInEditor',
       dropEditorMemo: 'memos/deleteMemo',
       setConfirmModalState: 'memos/setConfirmModalState',
     }),
     triggerDiscardCloseButton() {
       if (this.editorDocumentChanged) {
-        return this.setConfirmModalState({
+        return this.$store.dispatch('memos/setConfirmModalState', {
           isAsking: true,
           message: 'Are you sure you want to discard changes of this memo?',
-          confirmMethod: this.closeEditorMemo,
+          confirmMethod: () => this.$store.dispatch('memos/closeMemoInEditor'),
         })
       }
-      this.closeEditorMemo()
+      this.$store.dispatch('memos/closeMemoInEditor')
+    },
+    triggerFileUpload(e) {
+      const file = e.target.files[0]
+      const reader = new FileReader()
+      const imgEl = <HTMLImageElement>this.$refs.inputImg
+      reader.onload = (ev) => {
+        const source = <string>ev.target?.result
+        imgEl.src = source
+        this.$store.dispatch('memos/updateEditedMemoImg', source)
+      }
+      reader.readAsDataURL(file)
     },
   },
 })
@@ -150,10 +161,13 @@ export default Vue.extend({
             name="file-upload"
             type="file"
             class="sr-only"
+            @change="triggerFileUpload"
           />
         </div>
+        <div id="img-container">
+          <img id="user-input-img" ref="inputImg" :src="docImg" alt="user input img" />
+        </div>
       </div>
-
       <div id="taxonomy-control-btns">
         <button
           class="fuller-button red"
@@ -181,7 +195,17 @@ export default Vue.extend({
 
 <style lang="scss">
 #memo-editor-container {
-  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   #memo-editor-vacant {
     //my-1 px-4 py-5 space-y-6 sm:p-6 sm:overflow-hidden object-center
@@ -251,13 +275,14 @@ export default Vue.extend({
   }
 
   #taxonomy-upload-image {
+    margin-bottom: 30px;
     #taxonomy-p {
       margin-top: 50px;
     }
     #upload-button {
       position: relative;
       text-align: center;
-      margin: 20px 60px 60px;
+      margin: 30px 60px;
       cursor: pointer;
       #upload-label {
         cursor: pointer;
@@ -269,6 +294,9 @@ export default Vue.extend({
         width: 30px;
         height: 30px;
       }
+    }
+    #img-container {
+      padding: 0 15px;
     }
   }
 }
