@@ -215,15 +215,11 @@ export const mutations = {
     state.memoEditor.couchDoc.taxonomy = newTaxonomy
   },
   toggleActiveTaxonomies(state, taxonomy) {
-    const { activeTaxonomies } = state
     const index = state.activeTaxonomies.indexOf(taxonomy)
     if (index === -1) {
-      state.activeTaxonomies = [...activeTaxonomies, taxonomy]
+      state.activeTaxonomies.push(taxonomy)
     } else {
-      state.activeTaxonomies = [
-        ...activeTaxonomies.slice(0, index),
-        ...activeTaxonomies.slice(index + 1),
-      ]
+      state.activeTaxonomies.splice(index, 1)
     }
   },
   setAdvancedSearch(state, value: boolean) {
