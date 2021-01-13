@@ -61,6 +61,7 @@ export const actions = {
     try {
       const response = await axios.get(`${URL}/${_id}`)
       commit('setMemoInEditor', response.data.memoDoc)
+      commit('setEditorLoadedWithDocument', false)
     } catch (error) {
       console.error({ error })
     }
@@ -68,7 +69,7 @@ export const actions = {
   async openNewInEditor({ commit, dispatch }) {
     try {
       const blankMemoDocument = {
-        content: [],
+        content: [''],
         title: `memo ${new Date().toLocaleString()}`,
         taxonomy: [],
         source: 'mem0lib web-ui',
@@ -250,7 +251,7 @@ export const getters = {
   // Replace change detection approach to instead record in store change events from AceEditor,
   // and extend `title` and `taxonomy` input widgets to also fire change events.
   editorDocumentChanged(state, getters) {
-    if (!getters.editorLoadedWithDocument) return false
+    if (getters.editorLoadedWithDocument) return false
     const originalDocument = state.collection.filter(
       (memo) =>
         memo._id === state.memoEditor.couchDoc._id &&
@@ -267,6 +268,9 @@ export const getters = {
       taxonomy: state.memoEditor.couchDoc.taxonomy,
     })
     // Are there changes to content, title or taxonomy?
+    console.log(currentDocumentSerializedContent)
+    console.log(originalDocumentSerializedContent)
+    console.log(currentDocumentSerializedContent === originalDocumentSerializedContent)
     return (
       currentDocumentSerializedContent !== originalDocumentSerializedContent
     )

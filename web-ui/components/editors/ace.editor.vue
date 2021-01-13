@@ -20,7 +20,6 @@ export default Vue.extend({
           'memos/updateEditedMemoContent',
           content.split('\n')
         )
-        console.log(this.$store.getters['memos/editorDocumentChanged'])
       },
     },
   },
