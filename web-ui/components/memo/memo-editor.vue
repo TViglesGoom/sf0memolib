@@ -71,13 +71,11 @@ export default Vue.extend({
       if (!file) return
       // 10485760 == 10Mb
       if (file.size > 10485760) {
-        console.log('too big')
-        return
+        return this.$store.dispatch('memos/displayNotificationError', 'Image is too big')
       }
       const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif']
       if (!allowedImageTypes.includes(file.type)) {
-        console.log('not allowed image type')
-        return
+        return this.$store.dispatch('memos/displayNotificationError', 'Not allowed image type')
       }
       const reader = new FileReader()
       reader.onload = (ev) => {
