@@ -168,6 +168,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters({
       memosList: 'memos/memosList',
+      tagList: 'memos/taxonomyList',
     }),
   },
   methods: {

@@ -26,30 +26,24 @@ PROD_SESSION_NAME="memolib-build"
 
 if [ $1 == 'dev' ]
 then
-	echo "statring development mode"
-	./mem0lib db:up
+	echo "starting development mode"
 	tmux has-session -t $DEV_SESSION_NAME 2>/dev/null
 	if [ $? == 0 ]
 	then
 		tmux kill-session -t $DEV_SESSION_NAME
 	fi
 	tmux new-session -d -s $DEV_SESSION_NAME
+	tmux neww -n db-docker -t $DEV_SESSION_NAME: './mem0lib db:up'
 	tmux neww -n web-api -t $DEV_SESSION_NAME: 'cd ./web-api && npm run dev'
-	tmux neww -n web-ui -t $DEV_SESSION_NAME: 'cd ./web-ui && npm run dev'
-	tmux a -t $DEV_SESSION_NAME
+	tmux neww -n web-ui -t $DEV_SESSION_NAME: 'cd ./web-ui && npm run dev && tmux capture-pane -b temp-capture-buffer -S -'
+	tmux a -t $DEV_SESSION_NAME\; source-file ./tmux.conf
 elif [ $1 == 'prod' ]
 then
-	echo "building production version"
-	./mem0lib db:up
-	tmux has-session -t $PROD_SESSION_NAME 2>/dev/null
-	if [ $? == 0 ]
-	then
-		tmux kill-session -t $PROD_SESSION_NAME
-	fi
-	tmux new-session -d -s $PROD_SESSION_NAME
-	tmux neww -n web-api -t $PROD_SESSION_NAME: 'cd ./web-api && npm run build'
-	tmux neww -n web-ui -t $PROD_SESSION_NAME: 'cd ./web-ui && npm run build'
-	tmux a -t $PROD_SESSION_NAME
+	# IMO no point using tmux for building prod since we don't need
+	# multiple shells for that. Also - I would not worry much about `prod`
+	# at this point - there are no tests, no CI/CD and hence
+	# build and deploy automation might be a bit premature.
+	echo "building production version (pending implementation).."
 elif [ $1 == 'db:init' ]
 then
   echo "building CouchDB service"
@@ -72,15 +66,17 @@ then
   docker stop mem0lib-couchdb
 elif [ $1 == 'db:backup' ]
 then
-  echo "@todo: backup data ;env and conf?"
+  echo "@todo: backup data, env and conf?"
   echo "zip up ./databases/couchdb/data && ./databases/couchdb/etc dirs (and logs)"
 elif [ $1 == 'db:restore' ]
 then
-  echo "@todo: restore data ;env and conf"
-  # ..
+  echo "@todo: restore data, env and conf"
 elif [ $1 == 'install' ]
 then
   cp "$BASE_PATH/.env.example" "$BASE_PATH/.env"
+  # @todo web-api npm install
+  # @todo web-ui npm install
+  # @todo optionally set up tmux if not already on system
 elif [ $1 == 'uninstall' ]
 then
   rm -rf .env
@@ -96,9 +92,14 @@ Available sub-commands:\n
   ${LIGHT_CYAN}install${NC}\n
   \t Install pre-requisites\n
   ${LIGHT_CYAN}uninstall${NC}\n
-  \t Uninstall pre-requisites n\n
+  \t Uninstall pre-requisites\n
   ${LIGHT_CYAN}--help${NC}\n
   \t Display help message\n
+  \n
+  ${ORANGE}Tmux development mode${NC}\n
+  \n
+  ${LIGHT_CYAN}dev${NC}\n
+  \t Start tmux session with CouchDB docker container and server, client dev scripts in it\n
   \n
   ${ORANGE}CouchDB service${NC}\n
   \n
@@ -108,7 +109,7 @@ Available sub-commands:\n
   ${LIGHT_CYAN}db:up${NC}\n
   \t Start CouchDB service\n
   ${LIGHT_CYAN}db:down${NC}\n
-  \t Stop CouchDB service n\n
+  \t Stop CouchDB service \n
 "
   echo -e $__help_message
 else

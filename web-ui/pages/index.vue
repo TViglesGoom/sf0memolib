@@ -16,6 +16,9 @@
         <memo-list></memo-list>
       </div>
       <!--      <div id="web-ui-right-col"></div>-->
+      <div v-if="isAdvancedSearch" id="memo-filter">
+        <memo-filter />
+      </div>
     </div>
 
     <footer-component></footer-component>
@@ -32,27 +35,29 @@
   display: flex;
   height: 100vh;
   flex-flow: column;
-  background-color: #4a4443;
+  background-color: #333;
 
   #web-ui-main {
     display: inline-flex;
     flex: auto;
 
     #web-ui-left-col {
+      flex: 2;
       padding: 4px 16px;
       border-right: solid 1px #fff;
       color: #fff;
-      flex: 1;
       height: 100%;
-      background-color: #333;
     }
 
     #web-ui-right-col {
       position: relative;
-      flex: 1;
+      flex: 2;
       height: 100%;
       padding: 12px;
-      background-color: #333;
+    }
+    #memo-filter {
+      flex: 1;
+      border-left: solid 1px white;
     }
   }
 }
@@ -70,6 +75,7 @@ import MemoEditorComponent from '@/components/memo/memo-editor.vue'
 import MemoListComponent from '@/components/memo/memo-list.vue'
 import MemoViewerComponent from '@/components/memo/memo-viewer.vue'
 import TaxonomyManagerComponent from '@/components/taxonomy/taxonomy-manager.vue'
+import MemoFilter from '@/components/memo/memo-filter.vue'
 
 class Store {
   state = {
@@ -104,6 +110,7 @@ export default Vue.extend({
     'memo-list': MemoListComponent,
     confirm: Confirm,
     'taxonomy-manager': TaxonomyManagerComponent,
+    'memo-filter': MemoFilter,
   },
   data: () => ({
     confirmData: store.state,
@@ -112,6 +119,7 @@ export default Vue.extend({
   computed: {
     ...mapGetters({
       memosList: 'memos/memosList',
+      isAdvancedSearch: 'memos/isAdvancedSearch',
     }),
   },
   async mounted() {

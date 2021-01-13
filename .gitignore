@@ -15,3 +15,5 @@ get-docker.sh
 databases/couchdb/data
 databases/couchdb/etc
 databases/couchdb/log
+
+web-ui/static/sw.js

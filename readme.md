@@ -60,7 +60,7 @@ $ npm install
 $ npm run dev
 ```
 
-#### run coach-db docker container
+#### run CouchDB docker container
 
 ```bash
 # build a container for the first time
@@ -87,28 +87,15 @@ $ curl -X PUT <HOST>:<PORT>/<TABLE_NAME>
 # for development purposes
 $ ./mem0lib dev
 
-# for production
+# for production (pending)
 $ ./mem0lib prod
 ```
 
-See `./mem0lib --help` for app init, start, stop.
+See `./mem0lib --help` for details.
 
 ### env variables
 
 As an example of your .env file, you can use [.env.example](.env.example) file.
-
-#### Environment variables description
-- `API_HOST` server address. Should match the pattern "<CONNECTION_METHOD>://<SERVER_IP_ADDRESS>"
-- `API_PORT` indicates the port that the server is listening for the requests 
-- `API_VERSION` version of server api
-- `COUCHDB_HOST` ip address of server which runs couchdb
-- `COUCHDB_PORT` port for the couchdb requests to the `COUCHDB_HOST`
-- `COUCHDB_MEMOS_COLLECTION` table name to access in couchdb
-- `COUCHDB_ADMIN_PREFIX` path to couchdb admin (ui) page
-- `COUCHDB_USER` couchdb user for authorization
-- `COUCHDB_PWD` couchdb password for `COUCHDB_USER`
-- `WEBUI_PORT` port which is used to access ui of the application (currently on localhost)
-
 
 ### self-hosting
 

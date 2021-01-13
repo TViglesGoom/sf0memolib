@@ -23,7 +23,10 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '../.env' })
 
 const { API_PORT, WEBUI_PORT, API_HOST, API_VERSION,
-  COUCHDB_HOST, COUCHDB_PORT, COUCHDB_MEMOS_COLLECTION, COUCHDB_ADMIN_PREFIX } = process.env;
+  COUCHDB_HOST, COUCHDB_PORT, COUCHDB_ADMIN_PREFIX } = process.env;
+
+import conf from "../app.config.js"
+const { defaultCollection } = conf
 
 // @techdebt configure express options:
 //app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 3000);
@@ -66,8 +69,8 @@ app.get('/', (req, res) => {
     data: {
       "sf0web-api": `${API_HOST}:${API_PORT}/${API_VERSION}`,
       "sf0web-ui": `${API_HOST}:${WEBUI_PORT}`,
-      "sf0couch-api": `http://${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_MEMOS_COLLECTION}/`,
-      "sf0couch-web-ui": `http://${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_ADMIN_PREFIX}/`,
+      "sf0couch-api": `${COUCHDB_HOST}:${COUCHDB_PORT}/${defaultCollection}/`,
+      "sf0couch-web-ui": `${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_ADMIN_PREFIX}/`,
     }
   });
 })
@@ -123,6 +126,31 @@ app.get(`/${API_VERSION}/memo/couch/search/:regex`, async (req, res) => {
     searchResults,
   });
 });
+
+/**
+ * @api {get} memo/couch/search/<regexp> Search memos in CouchDB collection by keyword
+ * @apiName web-api
+ * @apiVersion 0.0.1
+ * @apiGroup mem0lib
+ *
+ * @apiSuccess {JSON} Collection of matched CouchDB documents and info about original search.
+ * Invokes CouchDB `/_find` with query:
+ * `"selector": { _id: { $gt: null }, $or: [{ content: { $elemMatch: { $regex: regex } } }, { title: { $regex: regex } }]`
+ */
+app.get(`/${API_VERSION}/memo/couch/advancedSearch`, async (req, res) => {
+  const regex = req.query.regex.split('').join('.*')
+  const filterBy = req.query.filterBy
+  let searchResults = await MemoLib.searchMemoCouchDocs(regex)
+  if (filterBy) {
+    searchResults = searchResults.filter(memo => filterBy.every(tag => memo.taxonomy.indexOf(tag) !== -1))
+  }
+  res.json({
+    status: "ok",
+    searchTerm: req.params['regex'],
+    searchResults,
+  });
+});
+
 
 /**
  * @api {get} memo/couch/<id> Get memo document by ID
