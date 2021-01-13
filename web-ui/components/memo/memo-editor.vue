@@ -67,8 +67,7 @@ export default Vue.extend({
       }
       this.$store.dispatch('memos/closeMemoInEditor')
     },
-    triggerFileUpload(e) {
-      const file = e.target.files[0]
+    uploadFile(file) {
       if (!file) return
       // 10485760 == 10Mb
       if (file.size > 10485760) {
@@ -87,6 +86,9 @@ export default Vue.extend({
       }
       reader.readAsDataURL(file)
     },
+    triggerFileUpload(e) {
+      this.uploadFile(e.target.files[0])
+    },
     triggerDeleteImage() {
       this.$store.dispatch('memos/setConfirmModalState', {
         isAsking: true,
@@ -94,6 +96,29 @@ export default Vue.extend({
         confirmMethod: () => this.$store.dispatch('memos/updateEditedMemoImg', ''),
       })
     },
+    triggerDrop(e) {
+      this.triggerDropRelatives(e)
+      this.uploadFile(e.dataTransfer.files[0])
+      this.triggerDragOut(e)
+    },
+    triggerDropRelatives(e) {
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    triggerDragIn(e) {
+      this.triggerDropRelatives(e)
+      const el = this.$refs.uploadBtn
+      if (el) {
+        el.classList.add('active')
+      }
+    },
+    triggerDragOut(e) {
+      this.triggerDropRelatives(e)
+      const el = this.$refs.uploadBtn
+      if (el) {
+        el.classList.remove('active')
+      }
+    }
   },
 })
 </script>
@@ -152,7 +177,15 @@ export default Vue.extend({
         <p id="taxonomy-p" class="regular-text">
           Attach files (will be stored as CouchDB document attachments)
         </p>
-        <div id="upload-button" class="fuller-button white">
+        <div id="upload-button" class="fuller-button white" ref="uploadBtn"
+             @drop="triggerDrop"
+             @drag="triggerDropRelatives"
+             @dragstart="triggerDropRelatives"
+             @dragend="triggerDragOut"
+             @dragover="triggerDragIn"
+             @dragenter="triggerDragIn"
+             @dragleave="triggerDropRelatives"
+        >
           <svg
             id="upload-svg"
             stroke="currentColor"
@@ -333,6 +366,9 @@ export default Vue.extend({
           color: #333;
         }
       }
+      #user-input-img {
+        width: 100%;
+      }
     }
   }
 }
@@ -356,7 +392,8 @@ export default Vue.extend({
     border: #0dd solid 2px;
   }
 
-  &.blue:hover {
+  &.blue:hover,
+  &.blue.active {
     background-color: #0dd;
     box-shadow: inset 0 0 0 rgba(0, 170, 170, 0.5),
       0 0 1.5em rgba(0, 170, 170, 0.7);
@@ -368,7 +405,8 @@ export default Vue.extend({
     border: #fb5454 solid 2px;
   }
 
-  &.red:hover {
+  &.red:hover,
+  &.red.active{
     background-color: #fb5454;
     box-shadow: inset 0 0 0 rgba(251, 81, 81, 0.4),
       0 0 1.5em rgba(251, 81, 81, 0.6);
@@ -380,7 +418,8 @@ export default Vue.extend({
     border: #fff solid 2px;
   }
 
-  &.white:hover {
+  &.white:hover,
+  &.white.active {
     color: rgba(0, 0, 0, 0.8);
     background-color: #fff;
     box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.3),
