@@ -284,11 +284,13 @@ export const getters = {
       title: originalDocument.title,
       content: originalDocument.content,
       taxonomy: originalDocument.taxonomy,
+      img: originalDocument.img,
     })
     const currentDocumentSerializedContent = JSON.stringify({
       title: state.memoEditor.couchDoc.title,
       content: state.memoEditor.couchDoc.content,
       taxonomy: state.memoEditor.couchDoc.taxonomy,
+      img: state.memoEditor.couchDoc.img,
     })
     // Are there changes to content, title or taxonomy?
     return (
