@@ -105,7 +105,6 @@ export const actions = {
   updateEditedMemoImg({ commit }, latestValue) {
     commit('setMemoEditorImg', latestValue)
   },
-  // @todo: file uploads
   async saveMemoInEditor({ commit, dispatch, state }) {
     if (state.memoEditor.couchDoc !== null) {
       const response = await axios.put(
@@ -218,7 +217,7 @@ export const mutations = {
     state.memoEditor.couchDoc.taxonomy = newTaxonomy
   },
   setMemoEditorImg(state, newImg: string) {
-    state.memoEditor.couchDoc.img = newImg
+    Vue.set(state.memoEditor.couchDoc, 'img', newImg)
   },
   toggleActiveTaxonomies(state, taxonomy) {
     const index = state.activeTaxonomies.indexOf(taxonomy)

@@ -69,14 +69,20 @@ export default Vue.extend({
     },
     triggerFileUpload(e) {
       const file = e.target.files[0]
+      if (!file) return
       const reader = new FileReader()
-      const imgEl = <HTMLImageElement>this.$refs.inputImg
       reader.onload = (ev) => {
         const source = <string>ev.target?.result
-        imgEl.src = source
         this.$store.dispatch('memos/updateEditedMemoImg', source)
       }
       reader.readAsDataURL(file)
+    },
+    triggerDeleteImage() {
+      this.$store.dispatch('memos/setConfirmModalState', {
+        isAsking: true,
+        message: 'Are you sure you want to delete image of this memo?',
+        confirmMethod: () => this.$store.dispatch('memos/updateEditedMemoImg', ''),
+      })
     },
   },
 })
@@ -164,8 +170,9 @@ export default Vue.extend({
             @change="triggerFileUpload"
           />
         </div>
-        <div id="img-container">
-          <img id="user-input-img" ref="inputImg" :src="docImg" alt="user input img" />
+        <div id="img-container" v-if="docImg">
+          <button id="img-delete-button" type="button" @click="triggerDeleteImage"> X </button>
+          <img id="user-input-img" :src="docImg" alt="user input img" />
         </div>
       </div>
       <div id="taxonomy-control-btns">
@@ -298,8 +305,19 @@ export default Vue.extend({
     }
     #img-container {
       padding: 0 15px;
-      #user-input-img[src=""] {
-        display: none;
+      position: relative;
+      #img-delete-button {
+        position: absolute;
+        top: 10px;
+        right: 25px;
+        background-color: #333;
+        width: 25px;
+        height: 25px;
+        border: solid #fff 1px;
+        &:hover {
+          background-color: #fff;
+          color: #333;
+        }
       }
     }
   }
