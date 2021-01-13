@@ -70,6 +70,16 @@ export default Vue.extend({
     triggerFileUpload(e) {
       const file = e.target.files[0]
       if (!file) return
+      // 10485760 == 10Mb
+      if (file.size > 10485760) {
+        console.log('too big')
+        return
+      }
+      const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif']
+      if (!allowedImageTypes.includes(file.type)) {
+        console.log('not allowed image type')
+        return
+      }
       const reader = new FileReader()
       reader.onload = (ev) => {
         const source = <string>ev.target?.result
