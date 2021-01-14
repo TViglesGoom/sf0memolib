@@ -85,6 +85,7 @@ export default Vue.extend({
       reader.readAsDataURL(file)
     },
     triggerFileUpload(e) {
+      // @ts-ignore
       this.uploadFile(e.target.files[0])
     },
     triggerDeleteImage() {
@@ -95,8 +96,11 @@ export default Vue.extend({
       })
     },
     triggerDrop(e) {
+      // @ts-ignore
       this.triggerDropRelatives(e)
+      // @ts-ignore
       this.uploadFile(e.dataTransfer.files[0])
+      // @ts-ignore
       this.triggerDragOut(e)
     },
     triggerDropRelatives(e) {
@@ -104,15 +108,17 @@ export default Vue.extend({
       e.stopPropagation()
     },
     triggerDragIn(e) {
+      // @ts-ignore
       this.triggerDropRelatives(e)
-      const el = this.$refs.uploadBtn
+      const el = <HTMLDivElement>this.$refs.uploadBtn
       if (el) {
         el.classList.add('active')
       }
     },
     triggerDragOut(e) {
+      // @ts-ignore
       this.triggerDropRelatives(e)
-      const el = this.$refs.uploadBtn
+      const el = <HTMLDivElement>this.$refs.uploadBtn
       if (el) {
         el.classList.remove('active')
       }
