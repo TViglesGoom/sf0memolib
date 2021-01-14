@@ -1,19 +1,33 @@
 <template>
-  <ul id="tags-list">
-    <li v-for="tag in taxonomyList" :key="tag">
-      <label :for="tag" :class="`tags-list-item ${activeTaxonomyList.indexOf(tag) !== -1 ? 'active' : ''}`">
-        {{ tag }}
-        <input
-          :id="tag"
-          :key="tag"
-          class="tags-input"
-          type="checkbox"
-          :checked="activeTaxonomyList.indexOf(tag) !== -1"
-          @change="triggerTaxonomy"
-        />
-      </label>
-    </li>
-  </ul>
+  <div id="filter-component">
+    <ul id="sort-list">
+      <li class="sort-item">
+        <label for="created_at">
+          created_at
+          <input id="created_at" type="checkbox" @change="triggerSort"/>
+        </label>
+        <label for="updated_at">
+          updated_at
+          <input id="updated_at" type="checkbox" @change="triggerSort"/>
+        </label>
+      </li>
+    </ul>
+    <ul id="tags-list">
+      <li v-for="tag in taxonomyList" :key="tag">
+        <label :for="tag" :class="`tags-list-item ${activeTaxonomyList.indexOf(tag) !== -1 ? 'active' : ''}`">
+          {{ tag }}
+          <input
+            :id="tag"
+            :key="tag"
+            class="tags-input"
+            type="checkbox"
+            :checked="activeTaxonomyList.indexOf(tag) !== -1"
+            @change="triggerTaxonomy"
+          />
+        </label>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -37,16 +51,18 @@ export default Vue.extend({
       this.toggleTaxonomy(e.target.id)
       await this.advancedSearchMemoLibrary()
     },
+    triggerSort(e) {
+      this.$store.dispatch('memos/sortMemosBy', {
+        fieldToSort: e.target.id,
+        isSortingUp: e.target.checked,
+      })
+    }
   },
 })
 </script>
 
 <style lang="scss" scoped>
-#tags-list {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-content: flex-start;
+#filter-component {
   padding: 2px 6px;
   position: absolute;
   left: 0;
@@ -59,20 +75,26 @@ export default Vue.extend({
   &::-webkit-scrollbar {
     display: none;
   }
-  .tags-list-item {
-    display: block;
-    cursor: pointer;
-    user-select: none;
-    color: #fff;
-    border: solid 1px white;
-    padding: 2px 6px;
-    margin: 8px 3px;
-    &.active {
-      background-color: #fff;
-      color: #000;
-    }
-    .tags-input {
-      display: none;
+  #tags-list {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-content: flex-start;
+    .tags-list-item {
+      display: block;
+      cursor: pointer;
+      user-select: none;
+      color: #fff;
+      border: solid 1px white;
+      padding: 2px 6px;
+      margin: 8px 3px;
+      &.active {
+        background-color: #fff;
+        color: #000;
+      }
+      .tags-input {
+        display: none;
+      }
     }
   }
 }

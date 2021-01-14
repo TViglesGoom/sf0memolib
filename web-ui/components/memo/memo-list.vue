@@ -55,6 +55,14 @@
             {{ memo.stats['tags'] }}
           </span>
         </span>
+        <p>
+          <span>created_at: </span>
+          <span>{{ memo.created_at.toISOString() }}</span>
+        </p>
+        <p>
+          <span>updated_at: </span>
+          <span>{{ memo.updated_at.toISOString() }}</span>
+        </p>
         <!--          <p>-->
         <!--            <span>_id: </span>-->
         <!--            <span>{{ memo._id }}</span>-->

@@ -31,10 +31,12 @@ export const actions = {
   async reloadLib({ commit }) {
     try {
       const response = await axios.get(`${URL}/list`)
-      commit(
-        'setCollection',
-        response.data.memos.map((obj) => obj.doc)
-      )
+      const result = response.data.memos.map((obj) => obj.doc)
+      result.forEach((memo) => {
+        memo.created_at = new Date(memo.created_at)
+        memo.updated_at = new Date(memo.updated_at)
+      })
+      commit('setCollection', result)
     } catch (e) {
       console.error('error', e)
     }
@@ -43,6 +45,10 @@ export const actions = {
     commit('setSearchTerm', regex)
     try {
       const response = await axios.get(`${URL}/search/${regex}`)
+      response.data.searchResults.forEach((memo) => {
+        memo.created_at = new Date(memo.created_at)
+        memo.updated_at = new Date(memo.updated_at)
+      })
       // @techdebt: decide if there's benefit to having search results and full list of memos in store as
       // distinct entries and if both would be needed at the same time. Decided in favour of independent variables,
       // if nothing else then to at least display info like "matched X / total_X docs"
@@ -57,6 +63,10 @@ export const actions = {
     try {
       const response = await axios.get(`${URL}/advancedSearch`, {
         params: { regex: state.search.term, filterBy: state.activeTaxonomies },
+      })
+      response.data.searchResults.forEach((memo) => {
+        memo.created_at = new Date(memo.created_at)
+        memo.updated_at = new Date(memo.updated_at)
       })
       commit('setCollection', response.data.searchResults)
     } catch (e) {
@@ -177,6 +187,9 @@ export const actions = {
   setConfirmModalState({ commit }, newState = {}) {
     commit('setConfirmModalState', newState)
   },
+  sortMemosBy({ commit }, payload: {fieldToSort: string, isSortingUp: boolean}) {
+    commit('sortMemosBy', payload)
+  },
 }
 
 export const mutations = {
@@ -244,6 +257,11 @@ export const mutations = {
       ...defaultState,
       ...newState,
     }
+  },
+  sortMemosBy(state, { fieldToSort, isSortingUp }) {
+    state.collection = [...state.collection].sort(
+      (a, b) => (isSortingUp ? 1 : -1) * (a[fieldToSort] - b[fieldToSort])
+    )
   },
 }
 
