@@ -12,12 +12,6 @@ export default Vue.extend({
     editor: AceEditorComponent,
     // editor: TUIEditorComponent,
   },
-  props: {
-    setData: {
-      type: Function,
-      default: () => {},
-    },
-  },
   data() {
     return {
       tag: '',
@@ -61,7 +55,18 @@ export default Vue.extend({
       saveEditorMemo: 'memos/saveMemoInEditor',
       closeEditorMemo: 'memos/closeMemoInEditor',
       dropEditorMemo: 'memos/deleteMemo',
+      setConfirmModalState: 'memos/setConfirmModalState',
     }),
+    triggerDiscardCloseButton() {
+      if (this.editorDocumentChanged) {
+        return this.setConfirmModalState({
+          isAsking: true,
+          message: 'Are you sure you want to discard changes of this memo?',
+          confirmMethod: this.closeEditorMemo,
+        })
+      }
+      this.closeEditorMemo()
+    },
   },
 })
 </script>
@@ -153,7 +158,7 @@ export default Vue.extend({
         <button
           class="fuller-button red"
           @click="
-            setData({
+            setConfirmModalState({
               isAsking: true,
               message: 'Are you sure you want to delete this memo?',
               confirmMethod: dropEditorMemo,
@@ -162,7 +167,7 @@ export default Vue.extend({
         >
           Delete
         </button>
-        <button class="fuller-button blue" @click="closeEditorMemo()">
+        <button class="fuller-button blue" @click="triggerDiscardCloseButton">
           <span v-if="editorDocumentChanged">Discard</span>
           <span v-else>Close</span>
         </button>

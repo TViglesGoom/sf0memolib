@@ -13,7 +13,14 @@ export const state = () => ({
   },
   activeTaxonomies: [],
   memoEditor: {
+    editorLoadedWithDocument: true,
     couchDoc: null,
+  },
+  confirmModal: {
+    isAsking: false,
+    message: '',
+    confirmMethod: () => {},
+    cancelMethod: () => {},
   },
   // notificationLog: [],
 })
@@ -60,6 +67,7 @@ export const actions = {
     try {
       const response = await axios.get(`${URL}/${_id}`)
       commit('setMemoInEditor', response.data.memoDoc)
+      commit('setEditorLoadedWithDocument', false)
     } catch (error) {
       console.error({ error })
     }
@@ -67,13 +75,14 @@ export const actions = {
   async openNewInEditor({ commit, dispatch }) {
     try {
       const blankMemoDocument = {
-        content: [],
+        content: [''],
         title: `memo ${new Date().toLocaleString()}`,
         taxonomy: [],
         source: 'mem0lib web-ui',
       }
       const response = await axios.post(URL, blankMemoDocument)
       commit('setMemoInEditor', response.data.memoDoc)
+      commit('setEditorLoadedWithDocument', false)
       await dispatch('reloadLib')
       dispatch(
         'displayNotificationSuccess',
@@ -154,7 +163,7 @@ export const actions = {
       5 * 1000
     )
   },
-  toggleTaxonomy({ commit, state }, tag: string) {
+  toggleTaxonomy({ commit }, tag: string) {
     commit('toggleActiveTaxonomies', tag)
   },
   advancedSearch({ commit }, value: boolean) {
@@ -162,6 +171,9 @@ export const actions = {
   },
   setAdvancedSearch({ commit }, value: boolean) {
     commit('setAdvancedSearch', value)
+  },
+  setConfirmModalState({ commit }, newState = {}) {
+    commit('setConfirmModalState', newState)
   },
 }
 
@@ -185,7 +197,8 @@ export const mutations = {
         state.memoEditor.couchDoc
       )
     } else {
-      state.memoEditor.couchDoc.content = newContent
+      // const content = state.memoEditor.couchDoc.content
+      Vue.set(state.memoEditor.couchDoc, 'content', newContent)
     }
   },
   setMemoEditorTitle(state, newTitle: string) {
@@ -202,19 +215,30 @@ export const mutations = {
     state.memoEditor.couchDoc.taxonomy = newTaxonomy
   },
   toggleActiveTaxonomies(state, taxonomy) {
-    const { activeTaxonomies } = state
     const index = state.activeTaxonomies.indexOf(taxonomy)
     if (index === -1) {
-      state.activeTaxonomies = [...activeTaxonomies, taxonomy]
+      state.activeTaxonomies.push(taxonomy)
     } else {
-      state.activeTaxonomies = [
-        ...activeTaxonomies.slice(0, index),
-        ...activeTaxonomies.slice(index + 1),
-      ]
+      state.activeTaxonomies.splice(index, 1)
     }
   },
   setAdvancedSearch(state, value: boolean) {
     state.search.advancedSearch = value
+  },
+  setEditorLoadedWithDocument(state, value: boolean) {
+    state.memoEditor.editorLoadedWithDocument = value
+  },
+  setConfirmModalState(state, newState) {
+    const defaultState = {
+      isAsking: false,
+      message: '',
+      confirmMethod: () => {},
+      cancelMethod: () => {},
+    }
+    state.confirmModal = {
+      ...defaultState,
+      ...newState,
+    }
   },
 }
 
@@ -244,8 +268,7 @@ export const getters = {
   // Replace change detection approach to instead record in store change events from AceEditor,
   // and extend `title` and `taxonomy` input widgets to also fire change events.
   editorDocumentChanged(state, getters) {
-    if (!getters.editorLoadedWithDocument) return false
-
+    if (getters.editorLoadedWithDocument) return false
     const originalDocument = state.collection.filter(
       (memo) =>
         memo._id === state.memoEditor.couchDoc._id &&
@@ -259,9 +282,8 @@ export const getters = {
     const currentDocumentSerializedContent = JSON.stringify({
       title: state.memoEditor.couchDoc.title,
       content: state.memoEditor.couchDoc.content,
-      taxonomy: state.memoEditor.taxonomy,
+      taxonomy: state.memoEditor.couchDoc.taxonomy,
     })
-
     // Are there changes to content, title or taxonomy?
     return (
       currentDocumentSerializedContent !== originalDocumentSerializedContent
@@ -288,5 +310,11 @@ export const getters = {
   },
   isAdvancedSearch(state) {
     return state.search.advancedSearch
+  },
+  editorLoadedWithDocument(state) {
+    return state.memoEditor.editorLoadedWithDocument
+  },
+  confirmModalState(state) {
+    return state.confirmModal
   },
 }
