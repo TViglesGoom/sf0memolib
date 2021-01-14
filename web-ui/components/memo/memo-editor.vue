@@ -85,6 +85,7 @@ export default Vue.extend({
       reader.readAsDataURL(file)
     },
     triggerFileUpload(e) {
+      // @ts-ignore
       this.uploadFile(e.target.files[0])
     },
     triggerDeleteImage() {
@@ -94,29 +95,34 @@ export default Vue.extend({
         confirmMethod: () => this.$store.dispatch('memos/updateEditedMemoImg', ''),
       })
     },
-    triggerDrop(e) {
-      this.triggerDropRelatives(e)
-      this.uploadFile(e.dataTransfer.files[0])
-      this.triggerDragOut(e)
-    },
     triggerDropRelatives(e) {
       e.preventDefault()
       e.stopPropagation()
     },
     triggerDragIn(e) {
+      // @ts-ignore
       this.triggerDropRelatives(e)
-      const el = this.$refs.uploadBtn
+      const el = <HTMLDivElement>this.$refs.uploadBtn
       if (el) {
         el.classList.add('active')
       }
     },
     triggerDragOut(e) {
+      // @ts-ignore
       this.triggerDropRelatives(e)
-      const el = this.$refs.uploadBtn
+      const el = <HTMLDivElement>this.$refs.uploadBtn
       if (el) {
         el.classList.remove('active')
       }
-    }
+    },
+    triggerDrop(e) {
+      // @ts-ignore
+      this.triggerDropRelatives(e)
+      // @ts-ignore
+      this.uploadFile(e.dataTransfer.files[0])
+      // @ts-ignore
+      this.triggerDragOut(e)
+    },
   },
 })
 </script>
