@@ -73,9 +73,16 @@ export const MemoLib = {
       console.error({error})
     }
   },
-  createMemoCouchDoc: async (memoJSON) => {
+  createMemoCouchDoc: async (memoObject) => {
     try {
-      const response = await axios.post(COUCHDB_DATABASE_URL, memoJSON, {
+      const date = new Date().toISOString()
+      const response = await axios.post(COUCHDB_DATABASE_URL,
+          {
+            ...memoObject,
+            created_at: date,
+            updated_at: date,
+          },
+          {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -93,14 +100,19 @@ export const MemoLib = {
       console.error({error});
     }
   },
-  updateMemoCouchDoc: async(memoJSON) => {
+  updateMemoCouchDoc: async(memoObject) => {
     try {
       // @techdebt assert memoJSON._rev exists
-      const response = await axios.put(`${COUCHDB_DATABASE_URL}/${memoJSON['_id']}`, memoJSON, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await axios.put(`${COUCHDB_DATABASE_URL}/${memoObject['_id']}`,
+          {
+            ...memoObject,
+            updated_at: new Date().toISOString(),
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
       return response['data'] ? response['data'] : {};
     } catch (error) {
       console.error({error});

@@ -144,7 +144,6 @@ app.get(`/${API_VERSION}/memo/couch/advancedSearch`, async (req, res) => {
   if (filterBy) {
     searchResults = searchResults.filter(memo => filterBy.every(tag => memo.taxonomy.indexOf(tag) !== -1))
   }
-  console.log(searchResults[0])
   res.json({
     status: "ok",
     searchTerm: req.params['regex'],
