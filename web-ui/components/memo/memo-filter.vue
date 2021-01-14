@@ -52,10 +52,11 @@ export default Vue.extend({
       await this.advancedSearchMemoLibrary()
     },
     triggerSort(e) {
-      this.$store.dispatch('memos/sortMemosBy', {
+      this.$store.dispatch('memos/setSort', {
         fieldToSort: e.target.id,
         isSortingUp: e.target.checked,
       })
+      this.$store.dispatch('memos/sortMemosBy')
     }
   },
 })

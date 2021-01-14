@@ -11,6 +11,10 @@ export const state = () => ({
     // results: [],
     advancedSearch: conf.advancedSearch,
   },
+  sort: {
+    fieldToSort: '',
+    isSortingUp: false,
+  },
   activeTaxonomies: [],
   memoEditor: {
     editorLoadedWithDocument: true,
@@ -37,6 +41,7 @@ export const actions = {
         memo.updated_at = new Date(memo.updated_at)
       })
       commit('setCollection', result)
+      commit('sortMemosBy')
     } catch (e) {
       console.error('error', e)
     }
@@ -55,6 +60,7 @@ export const actions = {
 
       // commit('setSearchResults', response['data']['searchResults'])
       commit('setCollection', response.data.searchResults)
+      commit('sortMemosBy')
     } catch (e) {
       console.error('error', e)
     }
@@ -69,6 +75,7 @@ export const actions = {
         memo.updated_at = new Date(memo.updated_at)
       })
       commit('setCollection', response.data.searchResults)
+      commit('sortMemosBy')
     } catch (e) {
       console.error('error', e)
     }
@@ -187,8 +194,11 @@ export const actions = {
   setConfirmModalState({ commit }, newState = {}) {
     commit('setConfirmModalState', newState)
   },
-  sortMemosBy({ commit }, payload: {fieldToSort: string, isSortingUp: boolean}) {
-    commit('sortMemosBy', payload)
+  sortMemosBy({ commit }) {
+    commit('sortMemosBy')
+  },
+  setSort({ commit }, payload: { fieldToSort: string; isSortingUp: boolean }) {
+    commit('setSort', payload)
   },
 }
 
@@ -258,10 +268,15 @@ export const mutations = {
       ...newState,
     }
   },
-  sortMemosBy(state, { fieldToSort, isSortingUp }) {
+  sortMemosBy(state) {
+    const { fieldToSort, isSortingUp } = state.sort
+    if (!fieldToSort) return
     state.collection = [...state.collection].sort(
       (a, b) => (isSortingUp ? 1 : -1) * (a[fieldToSort] - b[fieldToSort])
     )
+  },
+  setSort(state, payload: {fieldToSort: string, isSortingUp: boolean}) {
+    state.sort = payload
   },
 }
 
