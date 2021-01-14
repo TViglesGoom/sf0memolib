@@ -46,7 +46,19 @@ export default Vue.extend({
   display: inline-flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  align-content: flex-start;
   padding: 2px 6px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   .tags-list-item {
     display: block;
     cursor: pointer;

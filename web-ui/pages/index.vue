@@ -54,6 +54,7 @@
       padding: 12px;
     }
     #memo-filter {
+      position: relative;
       flex: 1;
       border-left: solid 1px white;
     }
