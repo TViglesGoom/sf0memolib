@@ -1,14 +1,18 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div id="filter-component">
     <ul id="sort-list">
-      <li class="sort-item">
-        <label for="created_at">
-          created_at
-          <input id="created_at" type="checkbox" @change="triggerSort"/>
+      <li :class="`sort-item ${sortingValues.fieldToSort === 'created_at' ? 'active' : ''}`">
+        <label class="sort-label" for="created_at">
+          <span>created_at </span>
+          <input id="created_at" type="checkbox" class="sort-input" @change="triggerSort" />
+          <span class="arrow-down">&#8595;</span>
         </label>
-        <label for="updated_at">
-          updated_at
-          <input id="updated_at" type="checkbox" @change="triggerSort"/>
+      </li>
+      <li :class="`sort-item ${sortingValues.fieldToSort === 'updated_at' ? 'active' : ''}`">
+        <label class="sort-label" for="updated_at">
+          <span>updated_at </span>
+          <input id="updated_at" type="checkbox" class="sort-input" @change="triggerSort" />
+          <span class="arrow-down">&#8595;</span>
         </label>
       </li>
     </ul>
@@ -39,6 +43,7 @@ export default Vue.extend({
       taxonomyList: 'memos/taxonomyList',
       activeTaxonomyList: 'memos/activeTaxonomyList',
       isAdvancedSearch: 'memos/isAdvancedSearch',
+      sortingValues: 'memos/sortingValues',
     }),
   },
   methods: {
@@ -57,7 +62,7 @@ export default Vue.extend({
         isSortingUp: e.target.checked,
       })
       this.$store.dispatch('memos/sortMemosBy')
-    }
+    },
   },
 })
 </script>
@@ -76,8 +81,47 @@ export default Vue.extend({
   &::-webkit-scrollbar {
     display: none;
   }
+  #sort-list {
+    padding: 5px;
+    color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: solid #fff 1px;
+    justify-content: space-around;
+    align-content: center;
+    .sort-item {
+      border: solid #fff 1px;
+      padding: 0 16px;
+      line-height: 30px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      &.active {
+        background-color: #0dd;
+        color: #333;
+      }
+      &:hover {
+        background-color: #fff;
+        color: #333;
+        border-color: #0dd;
+      }
+      .sort-label {
+        cursor: pointer;
+        .arrow-down {
+          display: inline-block;
+          transform: scale(1.3);
+        }
+        .sort-input {
+          display: none;
+          position: relative;
+          &:checked + .arrow-down {
+            transform: rotateX(180deg) scale(1.3);
+          }
+        }
+      }
+    }
+  }
   #tags-list {
-    display: inline-flex;
+    display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-content: flex-start;
@@ -90,8 +134,13 @@ export default Vue.extend({
       padding: 2px 6px;
       margin: 8px 3px;
       &.active {
+        background-color: #0dd;
+        color: #333;
+      }
+      &:hover {
         background-color: #fff;
-        color: #000;
+        color: #333;
+        border-color: #0dd;
       }
       .tags-input {
         display: none;

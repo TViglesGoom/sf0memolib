@@ -360,4 +360,7 @@ export const getters = {
   confirmModalState(state) {
     return state.confirmModal
   },
+  sortingValues(state) {
+    return state.sort
+  },
 }
