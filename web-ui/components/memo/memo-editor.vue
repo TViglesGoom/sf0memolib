@@ -6,6 +6,8 @@ import AceEditorComponent from '@/components/editors/ace.editor.vue'
 import TUIEditorComponent from '@/components/editors/tui.editor.vue'
 import { mapActions, mapGetters } from 'vuex'
 
+import conf from '../../../app.config.js'
+
 export default Vue.extend({
   components: {
     VueTagsInput, // @ref: http://www.vue-tags-input.com/#/ , https://github.com/JohMun/vue-tags-input
@@ -68,9 +70,8 @@ export default Vue.extend({
       this.$store.dispatch('memos/closeMemoInEditor')
     },
     uploadFile(file) {
-
       if (!file) return
-      if (file.size > 10485760) {
+      if (file.size > conf.maxUploadFileSize) {
         return this.$store.dispatch('memos/displayNotificationError', 'Image is too big')
       }
       const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif']
