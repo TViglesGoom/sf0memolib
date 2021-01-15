@@ -6,6 +6,8 @@ import AceEditorComponent from '@/components/editors/ace.editor.vue'
 import TUIEditorComponent from '@/components/editors/tui.editor.vue'
 import { mapActions, mapGetters } from 'vuex'
 
+import conf from '../../../app.config.js'
+
 export default Vue.extend({
   components: {
     VueTagsInput, // @ref: http://www.vue-tags-input.com/#/ , https://github.com/JohMun/vue-tags-input
@@ -23,6 +25,7 @@ export default Vue.extend({
       editorDocumentChanged: 'memos/editorDocumentChanged',
       docTitle: 'memos/editorDocumentTitle',
       docTaxonomy: 'memos/editorDocumentTaxonomy',
+      docImg: 'memos/editorDocumentImg'
     }),
     memoTitle: {
       get() {
@@ -53,20 +56,74 @@ export default Vue.extend({
     ...mapActions({
       newEditorMemo: 'memos/openNewInEditor',
       saveEditorMemo: 'memos/saveMemoInEditor',
-      closeEditorMemo: 'memos/closeMemoInEditor',
       dropEditorMemo: 'memos/deleteMemo',
       setConfirmModalState: 'memos/setConfirmModalState',
     }),
     triggerDiscardCloseButton() {
       if (this.editorDocumentChanged) {
-        return this.setConfirmModalState({
-          isAsking: true,
+        return this.$store.dispatch('memos/setConfirmModalState', {
+          isActive: true,
           message: 'Are you sure you want to discard changes of this memo?',
-          confirmMethod: this.closeEditorMemo,
+          confirmMethod: () => this.$store.dispatch('memos/closeMemoInEditor'),
         })
       }
-      this.closeEditorMemo()
+      this.$store.dispatch('memos/closeMemoInEditor')
     },
+    uploadFile(file) {
+      if (!file) return
+      if (file.size > conf.maxUploadFileSize) {
+        return this.$store.dispatch('memos/displayNotificationError', 'Image is too big')
+      }
+      const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif']
+      if (!allowedImageTypes.includes(file.type)) {
+        return this.$store.dispatch('memos/displayNotificationError', 'Not allowed image type')
+      }
+      const reader = new FileReader()
+      reader.onload = (ev) => {
+        const source = <string>ev.target?.result
+        this.$store.dispatch('memos/updateEditedMemoImg', source)
+      }
+      reader.readAsDataURL(file)
+    },
+    triggerFileUpload(e) {
+      // @ts-ignore
+      this.uploadFile(e.target.files[0])
+    },
+    triggerDeleteImage() {
+      this.$store.dispatch('memos/setConfirmModalState', {
+        isActive: true,
+        message: 'Are you sure you want to delete image of this memo?',
+        confirmMethod: () => this.$store.dispatch('memos/updateEditedMemoImg', ''),
+      })
+    },
+    triggerDrop(e) {
+      // @ts-ignore
+      this.triggerDropRelatives(e)
+      // @ts-ignore
+      this.uploadFile(e.dataTransfer.files[0])
+      // @ts-ignore
+      this.triggerDragOut(e)
+    },
+    triggerDropRelatives(e) {
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    triggerDragIn(e) {
+      // @ts-ignore
+      this.triggerDropRelatives(e)
+      const el = <HTMLDivElement>this.$refs.uploadBtn
+      if (el) {
+        el.classList.add('active')
+      }
+    },
+    triggerDragOut(e) {
+      // @ts-ignore
+      this.triggerDropRelatives(e)
+      const el = <HTMLDivElement>this.$refs.uploadBtn
+      if (el) {
+        el.classList.remove('active')
+      }
+    }
   },
 })
 </script>
@@ -125,7 +182,15 @@ export default Vue.extend({
         <p id="taxonomy-p" class="regular-text">
           Attach files (will be stored as CouchDB document attachments)
         </p>
-        <div id="upload-button" class="fuller-button white">
+        <div id="upload-button" class="fuller-button white" ref="uploadBtn"
+             @drop="triggerDrop"
+             @drag="triggerDropRelatives"
+             @dragstart="triggerDropRelatives"
+             @dragend="triggerDragOut"
+             @dragover="triggerDragIn"
+             @dragenter="triggerDragIn"
+             @dragleave="triggerDropRelatives"
+        >
           <svg
             id="upload-svg"
             stroke="currentColor"
@@ -150,16 +215,20 @@ export default Vue.extend({
             name="file-upload"
             type="file"
             class="sr-only"
+            @change="triggerFileUpload"
           />
         </div>
+        <div id="img-container" v-if="docImg">
+          <button id="img-delete-button" type="button" @click="triggerDeleteImage"> X </button>
+          <img id="user-input-img" :src="docImg" alt="user input img" />
+        </div>
       </div>
-
       <div id="taxonomy-control-btns">
         <button
           class="fuller-button red"
           @click="
             setConfirmModalState({
-              isAsking: true,
+              isActive: true,
               message: 'Are you sure you want to delete this memo?',
               confirmMethod: dropEditorMemo,
             })
@@ -181,7 +250,17 @@ export default Vue.extend({
 
 <style lang="scss">
 #memo-editor-container {
-  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   #memo-editor-vacant {
     //my-1 px-4 py-5 space-y-6 sm:p-6 sm:overflow-hidden object-center
@@ -251,16 +330,22 @@ export default Vue.extend({
   }
 
   #taxonomy-upload-image {
+    margin-bottom: 30px;
+    text-align: center;
     #taxonomy-p {
       margin-top: 50px;
     }
     #upload-button {
       position: relative;
       text-align: center;
-      margin: 20px 60px 60px;
+      margin: 30px 60px;
+      padding: 0;
       cursor: pointer;
       #upload-label {
+        padding: 14px;
+        position: relative;
         cursor: pointer;
+        display: block;
       }
       #upload-svg {
         position: absolute;
@@ -268,6 +353,26 @@ export default Vue.extend({
         right: 10px;
         width: 30px;
         height: 30px;
+      }
+    }
+    #img-container {
+      padding: 0 15px;
+      position: relative;
+      #img-delete-button {
+        position: absolute;
+        top: 10px;
+        right: 25px;
+        background-color: #333;
+        width: 25px;
+        height: 25px;
+        border: solid #fff 1px;
+        &:hover {
+          background-color: #fff;
+          color: #333;
+        }
+      }
+      #user-input-img {
+        width: 100%;
       }
     }
   }
@@ -292,7 +397,8 @@ export default Vue.extend({
     border: #0dd solid 2px;
   }
 
-  &.blue:hover {
+  &.blue:hover,
+  &.blue.active {
     background-color: #0dd;
     box-shadow: inset 0 0 0 rgba(0, 170, 170, 0.5),
       0 0 1.5em rgba(0, 170, 170, 0.7);
@@ -304,7 +410,8 @@ export default Vue.extend({
     border: #fb5454 solid 2px;
   }
 
-  &.red:hover {
+  &.red:hover,
+  &.red.active{
     background-color: #fb5454;
     box-shadow: inset 0 0 0 rgba(251, 81, 81, 0.4),
       0 0 1.5em rgba(251, 81, 81, 0.6);
@@ -316,7 +423,8 @@ export default Vue.extend({
     border: #fff solid 2px;
   }
 
-  &.white:hover {
+  &.white:hover,
+  &.white.active {
     color: rgba(0, 0, 0, 0.8);
     background-color: #fff;
     box-shadow: inset 0 0 0 rgba(255, 255, 255, 0.3),

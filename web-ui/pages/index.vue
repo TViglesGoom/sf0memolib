@@ -39,6 +39,7 @@
     flex: auto;
 
     #web-ui-left-col {
+      position: relative;
       flex: 2;
       padding: 4px 16px;
       border-right: solid 1px #fff;

@@ -17,7 +17,7 @@ export const state = () => ({
     couchDoc: null,
   },
   confirmModal: {
-    isAsking: false,
+    isActive: false,
     message: '',
     confirmMethod: () => {},
     cancelMethod: () => {},
@@ -102,7 +102,9 @@ export const actions = {
   updateEditedMemoTaxonomy({ commit }, latestValue) {
     commit('setMemoEditorTaxonomy', latestValue)
   },
-  // @todo: file uploads
+  updateEditedMemoImg({ commit }, latestValue) {
+    commit('setMemoEditorImg', latestValue)
+  },
   async saveMemoInEditor({ commit, dispatch, state }) {
     if (state.memoEditor.couchDoc !== null) {
       const response = await axios.put(
@@ -214,6 +216,9 @@ export const mutations = {
   setMemoEditorTaxonomy(state, newTaxonomy: string[]) {
     state.memoEditor.couchDoc.taxonomy = newTaxonomy
   },
+  setMemoEditorImg(state, newImg: string) {
+    Vue.set(state.memoEditor.couchDoc, 'img', newImg)
+  },
   toggleActiveTaxonomies(state, taxonomy) {
     const index = state.activeTaxonomies.indexOf(taxonomy)
     if (index === -1) {
@@ -230,7 +235,7 @@ export const mutations = {
   },
   setConfirmModalState(state, newState) {
     const defaultState = {
-      isAsking: false,
+      isActive: false,
       message: '',
       confirmMethod: () => {},
       cancelMethod: () => {},
@@ -278,11 +283,13 @@ export const getters = {
       title: originalDocument.title,
       content: originalDocument.content,
       taxonomy: originalDocument.taxonomy,
+      img: originalDocument.img,
     })
     const currentDocumentSerializedContent = JSON.stringify({
       title: state.memoEditor.couchDoc.title,
       content: state.memoEditor.couchDoc.content,
       taxonomy: state.memoEditor.couchDoc.taxonomy,
+      img: state.memoEditor.couchDoc.img,
     })
     // Are there changes to content, title or taxonomy?
     return (
@@ -297,6 +304,9 @@ export const getters = {
   },
   editorDocumentTaxonomy(state) {
     return state.memoEditor.couchDoc.taxonomy || []
+  },
+  editorDocumentImg(state) {
+    return state.memoEditor.couchDoc.img || ''
   },
   taxonomyList(state) {
     const tags = new Set()
