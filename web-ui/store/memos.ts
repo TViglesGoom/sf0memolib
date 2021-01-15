@@ -17,7 +17,7 @@ export const state = () => ({
     couchDoc: null,
   },
   confirmModal: {
-    isAsking: false,
+    isActive: false,
     message: '',
     confirmMethod: () => {},
     cancelMethod: () => {},
@@ -235,7 +235,7 @@ export const mutations = {
   },
   setConfirmModalState(state, newState) {
     const defaultState = {
-      isAsking: false,
+      isActive: false,
       message: '',
       confirmMethod: () => {},
       cancelMethod: () => {},

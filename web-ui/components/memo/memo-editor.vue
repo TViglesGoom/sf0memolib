@@ -60,7 +60,7 @@ export default Vue.extend({
     triggerDiscardCloseButton() {
       if (this.editorDocumentChanged) {
         return this.$store.dispatch('memos/setConfirmModalState', {
-          isAsking: true,
+          isActive: true,
           message: 'Are you sure you want to discard changes of this memo?',
           confirmMethod: () => this.$store.dispatch('memos/closeMemoInEditor'),
         })
@@ -68,8 +68,8 @@ export default Vue.extend({
       this.$store.dispatch('memos/closeMemoInEditor')
     },
     uploadFile(file) {
+
       if (!file) return
-      // 10485760 == 10Mb
       if (file.size > 10485760) {
         return this.$store.dispatch('memos/displayNotificationError', 'Image is too big')
       }
@@ -90,7 +90,7 @@ export default Vue.extend({
     },
     triggerDeleteImage() {
       this.$store.dispatch('memos/setConfirmModalState', {
-        isAsking: true,
+        isActive: true,
         message: 'Are you sure you want to delete image of this memo?',
         confirmMethod: () => this.$store.dispatch('memos/updateEditedMemoImg', ''),
       })
@@ -227,7 +227,7 @@ export default Vue.extend({
           class="fuller-button red"
           @click="
             setConfirmModalState({
-              isAsking: true,
+              isActive: true,
               message: 'Are you sure you want to delete this memo?',
               confirmMethod: dropEditorMemo,
             })
