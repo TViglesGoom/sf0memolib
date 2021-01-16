@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data.isAsking" id="container">
+  <div v-if="data.isActive" id="container">
     <div id="black-bg" />
     <div id="inner-container">
       <h3 id="title" class="regular-text">{{ data.message }}</h3>

@@ -6,6 +6,8 @@ import AceEditorComponent from '@/components/editors/ace.editor.vue'
 import TUIEditorComponent from '@/components/editors/tui.editor.vue'
 import { mapActions, mapGetters } from 'vuex'
 
+import conf from '../../../app.config.js'
+
 export default Vue.extend({
   components: {
     VueTagsInput, // @ref: http://www.vue-tags-input.com/#/ , https://github.com/JohMun/vue-tags-input
@@ -60,7 +62,7 @@ export default Vue.extend({
     triggerDiscardCloseButton() {
       if (this.editorDocumentChanged) {
         return this.$store.dispatch('memos/setConfirmModalState', {
-          isAsking: true,
+          isActive: true,
           message: 'Are you sure you want to discard changes of this memo?',
           confirmMethod: () => this.$store.dispatch('memos/closeMemoInEditor'),
         })
@@ -69,8 +71,7 @@ export default Vue.extend({
     },
     uploadFile(file) {
       if (!file) return
-      // 10485760 == 10Mb
-      if (file.size > 10485760) {
+      if (file.size > conf.maxUploadFileSize) {
         return this.$store.dispatch('memos/displayNotificationError', 'Image is too big')
       }
       const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif']
@@ -90,7 +91,7 @@ export default Vue.extend({
     },
     triggerDeleteImage() {
       this.$store.dispatch('memos/setConfirmModalState', {
-        isAsking: true,
+        isActive: true,
         message: 'Are you sure you want to delete image of this memo?',
         confirmMethod: () => this.$store.dispatch('memos/updateEditedMemoImg', ''),
       })
@@ -227,7 +228,7 @@ export default Vue.extend({
           class="fuller-button red"
           @click="
             setConfirmModalState({
-              isAsking: true,
+              isActive: true,
               message: 'Are you sure you want to delete this memo?',
               confirmMethod: dropEditorMemo,
             })
