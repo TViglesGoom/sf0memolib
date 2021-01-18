@@ -12,8 +12,8 @@ export const state = () => ({
     advancedSearch: conf.advancedSearch,
   },
   sort: {
-    fieldToSort: '',
-    isSortingUp: false,
+    method: 'title',
+    isSortUp: false,
   },
   activeTaxonomies: [],
   memoEditor: {
@@ -41,7 +41,7 @@ export const actions = {
         memo.updated_at = new Date(memo.updated_at)
       })
       commit('setCollection', result)
-      commit('sortMemosBy')
+      commit('sortMemos')
     } catch (e) {
       console.error('error', e)
     }
@@ -60,7 +60,7 @@ export const actions = {
 
       // commit('setSearchResults', response['data']['searchResults'])
       commit('setCollection', response.data.searchResults)
-      commit('sortMemosBy')
+      commit('sortMemos')
     } catch (e) {
       console.error('error', e)
     }
@@ -75,7 +75,7 @@ export const actions = {
         memo.updated_at = new Date(memo.updated_at)
       })
       commit('setCollection', response.data.searchResults)
-      commit('sortMemosBy')
+      commit('sortMemos')
     } catch (e) {
       console.error('error', e)
     }
@@ -194,11 +194,16 @@ export const actions = {
   setConfirmModalState({ commit }, newState = {}) {
     commit('setConfirmModalState', newState)
   },
-  sortMemosBy({ commit }) {
-    commit('sortMemosBy')
+  sortMemos({ commit }) {
+    commit('sortMemos')
   },
-  setSort({ commit }, payload: { fieldToSort: string; isSortingUp: boolean }) {
-    commit('setSort', payload)
+  setSortMethod({ commit }, newMethod: string) {
+    commit('setSortMethod', newMethod)
+    commit('sortMemos')
+  },
+  setIsSortUp({ commit }, isSortUp: boolean) {
+    commit('setIsSortUp', isSortUp)
+    commit('reverseMemos')
   },
 }
 
@@ -268,15 +273,34 @@ export const mutations = {
       ...newState,
     }
   },
-  sortMemosBy(state) {
-    const { fieldToSort, isSortingUp } = state.sort
-    if (!fieldToSort) return
-    state.collection = [...state.collection].sort(
-      (a, b) => (isSortingUp ? 1 : -1) * (a[fieldToSort] - b[fieldToSort])
-    )
+  sortMemos(state) {
+    const { method, isSortUp } = state.sort
+    const mult = isSortUp ? 1 : -1
+    let compareFn: Function
+    if (method === 'title') {
+      compareFn = (a, b) => mult * a.title.localeCompare(b.title)
+    } else if (['created_at', 'updated_at'].includes(method)) {
+      compareFn = (a, b) => mult * (a[method] - b[method])
+    } else if (method === 'lines_count') {
+      compareFn = (a, b) => mult * (a.content.length - b.content.length)
+    } else if (method === 'content_size') {
+      compareFn = (a, b) =>
+        mult * (a.content.join('\n').length - b.content.join('\n').length)
+    } else if (method === 'has_attachment') {
+      compareFn = (a, b) => mult * (+(a.img !== '') - +(b.img !== ''))
+    } else {
+      return console.error('No such method')
+    }
+    state.collection.sort(compareFn)
   },
-  setSort(state, payload: {fieldToSort: string, isSortingUp: boolean}) {
-    state.sort = payload
+  reverseMemos(state) {
+    state.collection.reverse()
+  },
+  setSortMethod(state, newMethod: string) {
+    state.sort.method = newMethod
+  },
+  setIsSortUp(state, isSortUp: boolean) {
+    state.sort.isSortUp = isSortUp
   },
 }
 
@@ -360,7 +384,10 @@ export const getters = {
   confirmModalState(state) {
     return state.confirmModal
   },
-  sortingValues(state) {
-    return state.sort
+  sortMethod(state) {
+    return state.sort.method
+  },
+  isSortUp(state) {
+    return state.sort.isSortUp
   },
 }
