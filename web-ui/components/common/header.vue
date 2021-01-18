@@ -9,9 +9,9 @@
       <div id="right-part">
         <form @input.prevent="triggerSearch" @submit.prevent="triggerSearch">
           <div>
-            <span>
-              <button @click="triggerSearch"></button>
-            </span>
+<!--            <span>-->
+<!--              <button @click="triggerSearch"></button>-->
+<!--            </span>-->
             <input
               id="search"
               v-model="searchTerm"
@@ -60,6 +60,8 @@
       background-color: transparent;
       border: solid 1px #fff;
       width: 400px;
+      line-height: 32px;
+      padding: 0 10px;
       &:focus {
         -webkit-box-shadow: none;
         box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3),

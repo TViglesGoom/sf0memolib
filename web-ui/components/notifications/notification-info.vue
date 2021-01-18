@@ -9,7 +9,7 @@ export default Vue.extend({
 <template>
   <div class="notification-container info-notification">
     <!--<div class="flex justify-center items-center w-12 bg-red-500" @click="close(notification.id)">-->
-    <div class="flex justify-center items-center w-12 bg-yellow-500">
+    <div class="">
       <svg
         class="h-6 w-6 fill-current text-white"
         viewBox="0 0 40 40"
@@ -44,6 +44,8 @@ export default Vue.extend({
 <style lang="scss">
 .info-notification {
   flex-direction: column;
+  background-color: #4a8c46;
+  margin-bottom: 10px;
   .flex {
     display: inline-flex;
   }
