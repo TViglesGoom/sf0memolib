@@ -25,7 +25,7 @@
       <!--            />-->
       <!--          </svg>-->
       <!--        </div>-->
-      <div id="doc-info">
+      <div class="doc-info">
         <div>
           <p>{{ memo.title }}</p>
           <span v-if="false"> | </span>
@@ -76,7 +76,7 @@
 
     <!--<button
         @click="openMemo(memo['_id'])" :title="`Edit MEMO:\n{\n\t_id: ${memo._id}\n\t_rev: ${memo._id}\n}`"
-        :class="ctrlButtonClassList">
+        :class="">
         <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
@@ -88,7 +88,7 @@
       </button>-->
     <!--<button
         @click="saveMemo()" :title="`Save changes to MEMO:\n{\n\t_id: ${memo._id}\n\t_rev: ${memo._id}\n}`"
-        :class="ctrlButtonClassList">
+        :class="">
         <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
@@ -128,7 +128,7 @@
   &::-webkit-scrollbar {
     display: none;
   }
-  #doc-info {
+  .doc-info {
     position: relative;
     top: 10px;
     left: 10px;
@@ -138,6 +138,10 @@
     border: solid 1px #fff;
     padding: 6px 10px;
     margin-bottom: 10px;
+    &:hover {
+      background-color: #fff;
+      color: #333;
+    }
   }
 }
 </style>
@@ -148,30 +152,6 @@ import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default Vue.extend({
-  data: () => {
-    return {
-      ctrlButtonClassList: [
-        'bg-olive-100',
-        'hover:bg-olive-400',
-        'focus:outline-none',
-        'focus:ring-1',
-        'focus:ring-purple-100',
-        'focus:ring-opacity-50',
-        'justify-center',
-        'py-2',
-        'px-4',
-        'border',
-        'border-transparent',
-        'shadow-sm',
-        'text-xs',
-        'font-medium',
-        'rounded-md',
-        'text-grey-900',
-        'w-6',
-        'h-6',
-      ],
-    }
-  },
   // @ref: https://github.com/davidroyer/nuxt-api-example/blob/master/components/Header.vue
   computed: {
     ...mapGetters({

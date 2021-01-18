@@ -1,6 +1,5 @@
 require.config({
     paths: {
-        bootstrap: './vendor/bootstrap.min',
         diffMatchPatch: './vendor/diff_match_patch.min',
         handlebars: './vendor/handlebars.min',
         handlebarsExtended: './utils/handlebars_helper',
@@ -17,9 +16,6 @@ require.config({
         apiProject: './api_project',
     },
     shim: {
-        bootstrap: {
-            deps: ['jquery']
-        },
         diffMatchPatch: {
             exports: 'diff_match_patch'
         },
@@ -49,7 +45,6 @@ require([
     'utilsSampleRequest',
     'semver',
     'webfontloader',
-    'bootstrap',
     'pathToRegexp',
     'list'
 ], function($, _, locale, Handlebars, apiProject, apiData, Prism, sampleRequest, semver, WebFont) {

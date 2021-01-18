@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <notificationGroup class="notif-group" group="appNotifications">
-      <div class="notif-container">
+      <div>
         <notification v-slot="{ notifications }">
           <div
             v-for="notification in notifications"
@@ -47,10 +47,27 @@ export default Vue.extend({
 .notif-group {
   position: absolute;
   right: 20px;
-  top: 20px;
-  .notif-container {
+  top: 80px;
+  z-index: 10;
+  .notification-container {
     //fixed inset-0 flex px-4 py-6 pointer-events-none p-6 items-start justify-end z-10
-    background-color: #fff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    width: 300px;
+    margin-bottom: 10px;
+    .notification-message {
+      word-break: break-all;
+      color: #fff;
+    }
+    .notification-icon-container {
+      width: 40px;
+      .notification-icon {
+        //height: 40px;
+        fill: #fff;
+      }
+    }
   }
 }
 </style>

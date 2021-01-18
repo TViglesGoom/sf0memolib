@@ -80,8 +80,8 @@ export default Vue.extend({
       }
       const reader = new FileReader()
       reader.onload = (ev) => {
-        const source = <string>ev.target?.result
-        this.$store.dispatch('memos/updateEditedMemoImg', source)
+        const source = <string>ev.target?.result;
+        this.$store.dispatch('memos/updateEditedMemoImg', source);
       }
       reader.readAsDataURL(file)
     },
@@ -299,6 +299,7 @@ export default Vue.extend({
       #memo-title {
         width: 100%;
         background-color: #333;
+        color: #fff;
         text-align: center;
       }
     }
@@ -347,6 +348,9 @@ export default Vue.extend({
         cursor: pointer;
         display: block;
       }
+      #file-upload {
+        display: none;
+      }
       #upload-svg {
         position: absolute;
         top: 10px;
@@ -366,6 +370,8 @@ export default Vue.extend({
         width: 25px;
         height: 25px;
         border: solid #fff 1px;
+        color: #fff;
+        cursor: pointer;
         &:hover {
           background-color: #fff;
           color: #333;
@@ -390,6 +396,7 @@ export default Vue.extend({
   background: none;
   border-radius: 0;
   margin: 1em;
+  cursor: pointer;
 
   &.blue {
     box-shadow: inset 0 0 1em rgba(0, 170, 170, 0.5),
