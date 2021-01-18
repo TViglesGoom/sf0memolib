@@ -62,6 +62,7 @@
       width: 400px;
       line-height: 32px;
       padding: 0 10px;
+      color: #fff;
       &:focus {
         -webkit-box-shadow: none;
         box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3),

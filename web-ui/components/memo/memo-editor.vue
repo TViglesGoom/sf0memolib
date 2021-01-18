@@ -301,6 +301,7 @@ export default Vue.extend({
         background-color: #333;
         color: #fff;
         text-align: center;
+        line-height: 24px;
       }
     }
 
