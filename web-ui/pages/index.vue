@@ -39,7 +39,8 @@
     color: white;
   }
   p {
-    margin: 4px;
+    margin: 0;
+    padding: 0;
   }
 
   // @ref: https://www.heropatterns.com/

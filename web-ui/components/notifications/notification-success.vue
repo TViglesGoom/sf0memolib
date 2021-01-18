@@ -8,10 +8,9 @@ export default Vue.extend({
 
 <template>
   <div class="notification-container success-notification">
-    <!--<div class="flex justify-center items-center w-12 bg-red-500" @click="close(notification.id)">-->
-    <div class="flex justify-center items-center w-12 bg-green-500">
+    <div class="notification-icon-container">
       <svg
-        class="h-6 w-6 fill-current text-white"
+        class="notification-icon"
         viewBox="0 0 40 40"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -20,11 +19,7 @@ export default Vue.extend({
         />
       </svg>
     </div>
-    <div class="flex justify-center items-center">
-      <div class="mx-3">
-        <p class="text-gray-600 text-xs">{{message}}</p>
-      </div>
-    </div>
+    <p class="notification-message">{{ message }}</p>
     <!--<button @click="close(notification.id)" class="absolute top-0 bottom-0 right-0 px-4 py-3 z-30">
       <svg
         class="fill-current h-6 w-6 text-red-500"
@@ -43,9 +38,6 @@ export default Vue.extend({
 
 <style lang="scss">
 .success-notification {
-  flex-direction: column;
-  .flex {
-    display: inline-flex;
-  }
+  background-color: #4a8c46;
 }
 </style>
