@@ -32,7 +32,7 @@ export const state = () => ({
 const URL = `${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_VERSION}/memo/couch`
 
 export const actions = {
-  async reloadLib({ commit }) {
+  async reloadLib({ commit, getters }) {
     try {
       const response = await axios.get(`${URL}/list`)
       const result = response.data.memos.map((obj) => obj.doc)
@@ -41,7 +41,7 @@ export const actions = {
         memo.updated_at = new Date(memo.updated_at)
       })
       commit('setCollection', result)
-      commit('sortMemos')
+      if (getters.isAdvancedSearch) commit('sortMemos')
     } catch (e) {
       console.error('error', e)
     }
@@ -60,7 +60,6 @@ export const actions = {
 
       // commit('setSearchResults', response['data']['searchResults'])
       commit('setCollection', response.data.searchResults)
-      commit('sortMemos')
     } catch (e) {
       console.error('error', e)
     }
