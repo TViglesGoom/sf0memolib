@@ -20,6 +20,7 @@ export default {
   css: [
     '~/assets/css/main.scss',
     '~/assets/themes/prism-ghcolors.css',
+    'normalize.css/normalize.css',
     //'knopf.css',
     //'fomantic-ui-css/semantic.min.css',
     //'github-markdown-css/github-markdown.css',
@@ -40,8 +41,6 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
-    // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    "@nuxtjs/tailwindcss",
 
     // @techdebt: "TypeError: GoogleFontsHelper is not a constructor"
     // Doc: https://github.com/nuxt-community/google-fonts-module

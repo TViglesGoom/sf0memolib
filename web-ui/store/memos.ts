@@ -11,6 +11,10 @@ export const state = () => ({
     // results: [],
     advancedSearch: conf.advancedSearch,
   },
+  sort: {
+    method: 'title',
+    isSortUp: false,
+  },
   activeTaxonomies: [],
   memoEditor: {
     editorLoadedWithDocument: true,
@@ -28,13 +32,16 @@ export const state = () => ({
 const URL = `${process.env.API_HOST}:${process.env.API_PORT}/${process.env.API_VERSION}/memo/couch`
 
 export const actions = {
-  async reloadLib({ commit }) {
+  async reloadLib({ commit, getters }) {
     try {
       const response = await axios.get(`${URL}/list`)
-      commit(
-        'setCollection',
-        response.data.memos.map((obj) => obj.doc)
-      )
+      const result = response.data.memos.map((obj) => obj.doc)
+      result.forEach((memo) => {
+        memo.created_at = new Date(memo.created_at)
+        memo.updated_at = new Date(memo.updated_at)
+      })
+      commit('setCollection', result)
+      if (getters.isAdvancedSearch) commit('sortMemos')
     } catch (e) {
       console.error('error', e)
     }
@@ -43,6 +50,10 @@ export const actions = {
     commit('setSearchTerm', regex)
     try {
       const response = await axios.get(`${URL}/search/${regex}`)
+      response.data.searchResults.forEach((memo) => {
+        memo.created_at = new Date(memo.created_at)
+        memo.updated_at = new Date(memo.updated_at)
+      })
       // @techdebt: decide if there's benefit to having search results and full list of memos in store as
       // distinct entries and if both would be needed at the same time. Decided in favour of independent variables,
       // if nothing else then to at least display info like "matched X / total_X docs"
@@ -58,7 +69,12 @@ export const actions = {
       const response = await axios.get(`${URL}/advancedSearch`, {
         params: { regex: state.search.term, filterBy: state.activeTaxonomies },
       })
+      response.data.searchResults.forEach((memo) => {
+        memo.created_at = new Date(memo.created_at)
+        memo.updated_at = new Date(memo.updated_at)
+      })
       commit('setCollection', response.data.searchResults)
+      commit('sortMemos')
     } catch (e) {
       console.error('error', e)
     }
@@ -177,6 +193,17 @@ export const actions = {
   setConfirmModalState({ commit }, newState = {}) {
     commit('setConfirmModalState', newState)
   },
+  sortMemos({ commit }) {
+    commit('sortMemos')
+  },
+  setSortMethod({ commit }, newMethod: string) {
+    commit('setSortMethod', newMethod)
+    commit('sortMemos')
+  },
+  setIsSortUp({ commit }, isSortUp: boolean) {
+    commit('setIsSortUp', isSortUp)
+    commit('reverseMemos')
+  },
 }
 
 export const mutations = {
@@ -244,6 +271,35 @@ export const mutations = {
       ...defaultState,
       ...newState,
     }
+  },
+  sortMemos(state) {
+    const { method, isSortUp } = state.sort
+    const mult = isSortUp ? 1 : -1
+    let compareFn: Function
+    if (method === 'title') {
+      compareFn = (a, b) => mult * a.title.localeCompare(b.title)
+    } else if (['created_at', 'updated_at'].includes(method)) {
+      compareFn = (a, b) => mult * (a[method] - b[method])
+    } else if (method === 'lines_count') {
+      compareFn = (a, b) => mult * (a.content.length - b.content.length)
+    } else if (method === 'content_size') {
+      compareFn = (a, b) =>
+        mult * (a.content.join('\n').length - b.content.join('\n').length)
+    } else if (method === 'has_attachment') {
+      compareFn = (a, b) => mult * (+(a.img !== '') - +(b.img !== ''))
+    } else {
+      return console.error('No such method')
+    }
+    state.collection.sort(compareFn)
+  },
+  reverseMemos(state) {
+    state.collection.reverse()
+  },
+  setSortMethod(state, newMethod: string) {
+    state.sort.method = newMethod
+  },
+  setIsSortUp(state, isSortUp: boolean) {
+    state.sort.isSortUp = isSortUp
   },
 }
 
@@ -326,5 +382,11 @@ export const getters = {
   },
   confirmModalState(state) {
     return state.confirmModal
+  },
+  sortMethod(state) {
+    return state.sort.method
+  },
+  isSortUp(state) {
+    return state.sort.isSortUp
   },
 }

@@ -1,9 +1,9 @@
 <template>
   <div id="horizon">
     <confirm />
-    <app-notification-group class="z-0 absolute"></app-notification-group>
+    <app-notification-group id="notif-group" />
 
-    <header-component></header-component>
+    <header-component />
 
     <div id="web-ui-main">
       <div id="web-ui-left-col">
@@ -18,14 +18,31 @@
       </div>
     </div>
 
-    <footer-component></footer-component>
+    <footer-component />
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import url('http://fonts.googleapis.com/css?family=Roboto');
 
 #horizon {
+  :root,
+  * {
+    box-sizing: border-box;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  a {
+    color: white;
+  }
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
   // @ref: https://www.heropatterns.com/
   position: relative;
   font-family: Roboto, Arial, serif;
@@ -34,6 +51,10 @@
   flex-flow: column;
   background-color: #333;
 
+  #notif-group {
+    position: absolute;
+    right: 10px;
+  }
   #web-ui-main {
     display: inline-flex;
     flex: auto;
@@ -54,6 +75,7 @@
       padding: 12px;
     }
     #memo-filter {
+      position: relative;
       flex: 1;
       border-left: solid 1px white;
     }
@@ -64,6 +86,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
+import '~/node_modules/normalize.css/normalize.css'
 
 import NotificationGroup from '@/components/notifications/notification-group.vue'
 import HeaderComponent from '@/components/common/header.vue'

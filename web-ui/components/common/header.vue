@@ -9,9 +9,9 @@
       <div id="right-part">
         <form @input.prevent="triggerSearch" @submit.prevent="triggerSearch">
           <div>
-            <span>
-              <button @click="triggerSearch"></button>
-            </span>
+<!--            <span>-->
+<!--              <button @click="triggerSearch"></button>-->
+<!--            </span>-->
             <input
               id="search"
               v-model="searchTerm"
@@ -60,6 +60,9 @@
       background-color: transparent;
       border: solid 1px #fff;
       width: 400px;
+      line-height: 32px;
+      padding: 0 10px;
+      color: #fff;
       &:focus {
         -webkit-box-shadow: none;
         box-shadow: inset 0 0 0.8em rgba(255, 255, 255, 0.3),
@@ -93,8 +96,7 @@ export default Vue.extend({
     }),
     advancedSearch: {
       get() {
-        const { isAdvancedSearch } = mapGetters({ isAdvancedSearch: 'memos/isAdvancedSearch' })
-        return isAdvancedSearch
+        return this.isAdvancedSearch
       },
       set(value) {
         // const { setAdvancedSearch } = mapActions({ setAdvancedSearch: 'memos/setAdvancedSearch' })
@@ -111,12 +113,15 @@ export default Vue.extend({
     async triggerSearch() {
       this.$store.commit('memos/setSearchTerm', this.searchTerm)
       if (this.isAdvancedSearch) {
+        // @ts-ignore
         await this.advancedSearchMemoLibrary()
       } else {
         if (this.searchTerm.length > 1) {
           // @todo min number of characters to search
+          // @ts-ignore
           await this.searchMemoLibrary(this.searchTerm)
         } else {
+          // @ts-ignore
           await this.loadMemoLibrary()
         }
       }

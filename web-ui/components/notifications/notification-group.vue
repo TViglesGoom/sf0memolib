@@ -1,31 +1,27 @@
 <template>
   <client-only>
-    <notificationGroup group="appNotifications">
-      <div
-        class="fixed inset-0 flex px-4 py-6 pointer-events-none p-6 items-start justify-end z-10"
-      >
-        <div class="max-w-sm w-full">
-          <notification v-slot="{ notifications, close }">
-            <div
-              class="flex max-w-sm w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden mt-4 z-20"
-              v-for="notification in notifications"
-              :key="notification.id"
-            >
-              <notification-info
-                :message="notification.text"
-                v-if="notification.type === 'info'"
-              ></notification-info>
-              <notification-success
-                :message="notification.text"
-                v-if="notification.type === 'success'"
-              ></notification-success>
-              <notification-error
-                :message="notification.text"
-                v-if="notification.type === 'error'"
-              ></notification-error>
-            </div>
-          </notification>
-        </div>
+    <notificationGroup class="notif-group" group="appNotifications">
+      <div>
+        <notification v-slot="{ notifications }">
+          <div
+            v-for="notification in notifications"
+            :key="notification.id"
+            class=""
+          >
+            <notification-info
+              v-if="notification.type === 'info'"
+              :message="notification.text"
+            ></notification-info>
+            <notification-success
+              v-if="notification.type === 'success'"
+              :message="notification.text"
+            ></notification-success>
+            <notification-error
+              v-if="notification.type === 'error'"
+              :message="notification.text"
+            ></notification-error>
+          </div>
+        </notification>
       </div>
     </notificationGroup>
   </client-only>
@@ -46,3 +42,32 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style lang="scss">
+.notif-group {
+  position: absolute;
+  right: 20px;
+  top: 80px;
+  z-index: 10;
+  .notification-container {
+    //fixed inset-0 flex px-4 py-6 pointer-events-none p-6 items-start justify-end z-10
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    width: 300px;
+    margin-bottom: 10px;
+    .notification-message {
+      word-break: break-all;
+      color: #fff;
+    }
+    .notification-icon-container {
+      width: 40px;
+      .notification-icon {
+        //height: 40px;
+        fill: #fff;
+      }
+    }
+  }
+}
+</style>

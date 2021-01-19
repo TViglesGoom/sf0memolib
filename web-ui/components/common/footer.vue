@@ -1,6 +1,6 @@
 <template>
-  <div id="web-ui-footer" class="bg-gray-100">
-    <p class="text-xs ml-2">
+  <div id="web-ui-footer">
+    <p>
       Web API: <a :href="WebAPI_URL">{{ WebAPI_URL }}</a>
       <span class="divider">|</span>
       CouchDB Fauxton UI: <a :href="CouchAdminUI_URL">{{CouchAdminUI_URL}}</a>
@@ -19,6 +19,7 @@
   text-align: center;
   p {
     line-height: 36px;
+    font-size: small;
     a {
       //color: blue;
       :hover {
