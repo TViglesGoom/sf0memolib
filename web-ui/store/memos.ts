@@ -19,6 +19,7 @@ export const state = () => ({
   memoEditor: {
     editorLoadedWithDocument: true,
     couchDoc: null,
+    originalDoc: {},
   },
   confirmModal: {
     isActive: false,
@@ -217,6 +218,7 @@ export const mutations = {
   //  state.search.results = searchResults;
   // },
   setMemoInEditor(state, memoObject) {
+    state.memoEditor.originalDoc = { ...memoObject }
     state.memoEditor.couchDoc = memoObject
   },
   setMemoEditorContent(state, newContent) {
@@ -329,11 +331,7 @@ export const getters = {
   // and extend `title` and `taxonomy` input widgets to also fire change events.
   editorDocumentChanged(state, getters) {
     if (getters.editorLoadedWithDocument) return false
-    const originalDocument = state.collection.filter(
-      (memo) =>
-        memo._id === state.memoEditor.couchDoc._id &&
-        memo._rev === state.memoEditor.couchDoc._rev
-    )[0] || { title: null, content: [], taxonomy: [] }
+    const originalDocument = state.memoEditor.originalDoc
     const originalDocumentSerializedContent = JSON.stringify({
       title: originalDocument.title,
       content: originalDocument.content,
