@@ -307,7 +307,6 @@ export const getters = {
   memosList(state) {
     return state.collection.map((item) => {
       return Object.assign({}, item, {
-        content: item.content[0],
         stats: {
           'wc -l': item.content?.length,
           tags: item.taxonomy?.length ? `[${item.taxonomy.join(', ')}]` : '0',

@@ -60,13 +60,14 @@ export const MemoLib = {
   searchMemoCouchDocs: async (regex) => {
     try {
       const response = await axios.post(`${COUCHDB_DATABASE_URL}/_find`, {
-        "selector": {
+        selector: {
           _id: { $gt: null },
           $or: [
             { content: { $elemMatch: { $regex: regex } } },
             { title: { $regex: regex } }
           ]
-        }
+        },
+        fields: ['_id', 'title', 'taxonomy', 'created_at', 'updated_at'],
       });
       return response['data']['docs'].length ? response['data']['docs'] : [];
     } catch (error) {
